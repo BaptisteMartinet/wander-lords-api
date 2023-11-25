@@ -6,7 +6,7 @@ import express from 'express';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import cors from 'cors';
-import schema from 'schema/index.js';
+import schema from './schema/index.js'
 
 // Create an Express app and HTTP server; we will attach both the WebSocket
 // server and the ApolloServer to this HTTP server.
@@ -47,5 +47,5 @@ app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(
 const PORT = 4000;
 // Now that our HTTP server is fully set up, we can listen to it.
 httpServer.listen(PORT, () => {
-  console.log(`Server is now running on http://localhost:${PORT}/graphql`);
+  console.log(`Server started at http://localhost:${PORT}/graphql 🚀`);
 });
