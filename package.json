@@ -1,0 +1,21 @@
+{
+  "name": "wander-lords-api",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "repository": "git@github.com:BaptisteMartinet/wander-lords-api.git",
+  "author": "Baptiste Martinet <baptiste.martinet@epitech.eu>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "compile": "tsc",
+    "start": "yarn run compile && node ./dist/index.js"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.9.5",
+    "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2"
+  }
+}
