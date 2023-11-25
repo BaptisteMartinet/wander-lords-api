@@ -8,9 +8,7 @@ export default new GraphQLObjectType({
   fields: {
     test: {
       type: GraphQLBoolean,
-      subscribe(source, args, ctx, info) {
-        return pubsub.asyncIterator('TEST_TRIGGER');
-      },
+      subscribe: () => pubsub.asyncIterator('TEST_TRIGGER'),
     },
   },
 });
