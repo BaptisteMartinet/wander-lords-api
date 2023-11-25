@@ -1,12 +1,23 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src"],
+    "rootDir": "src",
     "outDir": "dist",
     "lib": ["es2020"],
     "target": "es2020",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "sourceMap": true,
     "esModuleInterop": true,
-    "types": ["node"]
-  }
+    "types": ["node"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "baseUrl": "src/",
+    "paths": {
+      "@schema/*": ["schema/*"]
+    }
+  },
+  "include": ["src/**/*.ts"]
 }
