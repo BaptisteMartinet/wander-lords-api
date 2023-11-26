@@ -1,5 +1,5 @@
 import { GraphQLObjectType } from 'graphql';
-import { User } from '../../definitions/models/index.js';
+import { User } from '@definitions/models';
 
 export default new GraphQLObjectType({
   name: 'Query',

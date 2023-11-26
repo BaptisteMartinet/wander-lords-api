@@ -21,7 +21,10 @@
     "lib": ["es2022"],
     "baseUrl": "src",
     "paths": {
-      "@schema/*": ["schema/*"]
+      "@definitions/*": ["definitions/*"],
+      "@schema/*": ["schema/*"],
+      "@core/*": ["core/*"],
+      "@lib/*": ["lib/*"]
     }
   }
 }

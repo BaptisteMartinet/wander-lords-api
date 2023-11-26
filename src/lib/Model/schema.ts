@@ -1,7 +1,7 @@
 import type { ModelDefinition } from './types.js';
 
 import { GraphQLObjectType } from 'graphql';
-import { mapRecord, filterRecord } from '../index.js';
+import { mapRecord, filterRecord } from '@lib/utils';
 
 export function genGraphQLType(modelDefinition: ModelDefinition) {
   const { name, description, fields } = modelDefinition;

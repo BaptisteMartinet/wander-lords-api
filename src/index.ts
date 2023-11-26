@@ -1,13 +1,13 @@
+import express from 'express';
+import { createServer } from 'http';
+import cors from 'cors';
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { createServer } from 'http';
-import express from 'express';
-import { WebSocketServer } from 'ws';
-import { useServer } from 'graphql-ws/lib/use/ws';
-import cors from 'cors';
-import sequelize from './core/sequelize.js';
-import schema from '@schema/index.js';
+import sequelize from './core/sequelize';
+import schema from './schema';
 
 async function main() {
   await sequelize.authenticate();

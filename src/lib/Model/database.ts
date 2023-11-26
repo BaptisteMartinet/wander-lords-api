@@ -1,6 +1,6 @@
 import type { ModelDefinition } from './types.js';
 
-import { mapRecord } from '../index.js';
+import { mapRecord } from '@lib/utils';
 
 export function genDatabaseModel(definition: ModelDefinition) {
   const { sequelize, name, fields, timestamps } = definition;

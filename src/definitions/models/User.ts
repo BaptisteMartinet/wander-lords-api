@@ -1,5 +1,5 @@
-import Model, { Int, String } from '../../lib/Model/index.js';
-import sequelize from '../../core/sequelize.js';
+import Model, { Int, String } from '@lib/Model';
+import sequelize from '@core/sequelize.js';
 
 export default new Model({
   name: 'User',
