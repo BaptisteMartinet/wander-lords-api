@@ -1,6 +1,8 @@
 import { Sequelize } from 'sequelize';
-import { DATABASE_URL } from './env.js';
+import { DATABASE_URL, DISABLE_LOGGING } from './env.js';
 
-const sequelize = new Sequelize(DATABASE_URL);
+const sequelize = new Sequelize(DATABASE_URL, {
+  logging: DISABLE_LOGGING === false,
+});
 
 export default sequelize;
