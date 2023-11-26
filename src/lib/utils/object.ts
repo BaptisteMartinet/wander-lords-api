@@ -1,5 +1,6 @@
-export function mapRecord<T, U>(obj: Record<string, T>, fn: (value: T) => U) {
+export function mapRecord<K extends string, T, U>(obj: Record<K, T>, fn: (value: T) => U) {
   const newObj: Record<string, U> = {};
+
   for (const key in obj) {
     const value = obj[key];
     newObj[key] = fn(value);
@@ -7,7 +8,7 @@ export function mapRecord<T, U>(obj: Record<string, T>, fn: (value: T) => U) {
   return newObj;
 }
 
-export function filterRecord<T>(obj: Record<string, T>, fn: (value: T) => boolean) {
+export function filterRecord<K extends string, T>(obj: Record<K, T>, fn: (value: T) => boolean) {
   const newObj: Record<string, T> = {};
   for (const key in obj) {
     const value = obj[key];
