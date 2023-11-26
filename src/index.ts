@@ -11,6 +11,10 @@ import schema from './schema/index.js'
 
 await sequelize.authenticate();
 
+// TODO migration script
+await sequelize.sync({ force: true });
+console.warn('Database synchronized');
+
 const app = express();
 const httpServer = createServer(app);
 
