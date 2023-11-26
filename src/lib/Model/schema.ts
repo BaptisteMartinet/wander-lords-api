@@ -3,18 +3,18 @@ import type { ModelDefinition } from './types.js';
 import { GraphQLObjectType } from 'graphql';
 import { mapRecord, filterRecord } from '../index.js';
 
-export function genGraphQLType(args: ModelDefinition) {
-  const { name, description, fields } = args;
-  const exposedFields = filterRecord(fields, definition => definition.exposed);
+export function genGraphQLType(modelDefinition: ModelDefinition) {
+  const { name, description, fields } = modelDefinition;
+  const exposedFields = filterRecord(fields, field => field.exposed);
   return new GraphQLObjectType({
     name,
     description,
-    fields: mapRecord(exposedFields, definition => {
+    fields: mapRecord(exposedFields, field => {
       const {
         type,
         defaultValue,
         description,
-      } = definition;
+      } = field;
 
       return {
         type: type.gqlType,
