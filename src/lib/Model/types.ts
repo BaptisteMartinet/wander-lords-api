@@ -1,4 +1,4 @@
-import type { DataType } from 'sequelize';
+import type { Sequelize, DataType } from 'sequelize';
 
 import { GraphQLInt, GraphQLScalarType, GraphQLString } from 'graphql';
 import { DataTypes } from 'sequelize';
@@ -18,6 +18,7 @@ export interface FieldDefinition {
 }
 
 export interface ModelDefinition {
+  sequelize: Sequelize,
   name: string,
   fields: Record<string, FieldDefinition>,
   timestamps: boolean,
