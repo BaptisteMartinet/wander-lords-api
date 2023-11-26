@@ -1,4 +1,5 @@
 import Model, { Int, String } from '../../lib/Model/index.js';
+import sequelize from '../../core/sequelize.js';
 
 export default new Model({
   name: 'User',
@@ -8,4 +9,5 @@ export default new Model({
     testUnexposed: { type: Int, allowNull: false, exposed: false },
   },
   timestamps: true,
+  sequelize,
 });
