@@ -3,8 +3,6 @@ import type { ModelDefinition } from './types.js';
 import { GraphQLObjectType } from 'graphql';
 import { mapRecord, filterRecord } from '../index.js';
 
-
-
 export default class Model {
   private _type;
 
