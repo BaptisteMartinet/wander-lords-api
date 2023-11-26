@@ -6,7 +6,10 @@ import express from 'express';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import cors from 'cors';
+import sequelize from './core/sequelize.js';
 import schema from './schema/index.js'
+
+await sequelize.authenticate();
 
 const app = express();
 const httpServer = createServer(app);
