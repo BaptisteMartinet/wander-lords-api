@@ -17,7 +17,7 @@ export default class Model {
   }
 
   /**
-   * @returns The model's GraphQL type
+   * @returns The Model's GraphQL type
    */
   get type() {
     return this._type;
