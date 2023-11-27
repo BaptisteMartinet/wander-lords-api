@@ -1,16 +1,14 @@
 import type { Sequelize, DataType } from 'sequelize';
+import type { GraphQLScalarType } from 'graphql';
 
-import { GraphQLInt, GraphQLScalarType, GraphQLString } from 'graphql';
-import { DataTypes } from 'sequelize';
-
-export interface FieldTypeBase {
+export interface FieldType {
   identifier: string,
   gqlType: GraphQLScalarType,
   sequelizeType: DataType,
 }
 
 export interface FieldDefinition {
-  type: FieldTypeBase,
+  type: FieldType,
   exposed: boolean,
   allowNull: boolean,
   defaultValue?: unknown,
@@ -24,17 +22,3 @@ export interface ModelDefinition {
   timestamps: boolean,
   description?: string,
 }
-
-// TODO move somewhere else
-
-export const Int: FieldTypeBase = {
-  identifier: 'Int',
-  gqlType: GraphQLInt,
-  sequelizeType: DataTypes.INTEGER,
-};
-
-export const String: FieldTypeBase = {
-  identifier: 'String',
-  gqlType: GraphQLString,
-  sequelizeType: DataTypes.STRING,
-};
