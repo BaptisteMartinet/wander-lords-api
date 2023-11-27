@@ -1,4 +1,4 @@
-import Model, { Int, String } from '@lib/Model';
+import Model, { Int, String, Boolean } from '@lib/Model';
 import sequelize from '@core/sequelize.js';
 
 export default new Model({
@@ -7,6 +7,7 @@ export default new Model({
     testInt: { type: Int, allowNull: true, exposed: true },
     testString: { type: String, allowNull: false, exposed: true, description: 'coucou'},
     testUnexposed: { type: Int, allowNull: false, exposed: false },
+    testBool: { type: Boolean, allowNull: false, defaultValue: 12, exposed: true },
   },
   timestamps: true,
   sequelize,
