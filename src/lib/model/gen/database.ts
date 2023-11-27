@@ -1,17 +1,19 @@
+import type { Model as SequelizeModel } from 'sequelize';
 import type { ModelDefinition } from '@lib/model/types';
 
 import { mapRecord } from '@lib/utils';
 
-export function genDatabaseModel(definition: ModelDefinition) {
+export function genDatabaseModel<T extends SequelizeModel>(definition: ModelDefinition) {
   const { sequelize, name, fields, timestamps } = definition;
-  return sequelize.define(name, mapRecord(fields, (field) => {
+  const attributes = mapRecord(fields, (field) => {
     const { type, allowNull, defaultValue } = field;
     return {
       type: type.sequelizeType,
       allowNull,
       defaultValue,
     };
-  }), {
+  })
+  return sequelize.define<T>(name, attributes as never, {
     timestamps,
     freezeTableName: true,
   });
