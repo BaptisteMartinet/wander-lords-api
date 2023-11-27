@@ -16,10 +16,16 @@ export default class Model {
     return this._type.name;
   }
 
+  /**
+   * @returns The model's GraphQL type
+   */
   get type() {
     return this._type;
   }
 
+  /**
+   * @returns The sequelize Model
+   */
   get model() {
     return this._model;
   }
