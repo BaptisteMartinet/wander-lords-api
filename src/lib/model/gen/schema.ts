@@ -1,4 +1,4 @@
-import type { ModelDefinition } from './types.js';
+import type { ModelDefinition } from '@lib/model';
 
 import { GraphQLObjectType } from 'graphql';
 import { mapRecord, filterRecord } from '@lib/utils';

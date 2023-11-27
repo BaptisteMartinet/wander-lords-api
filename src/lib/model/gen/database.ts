@@ -1,4 +1,4 @@
-import type { ModelDefinition } from './types.js';
+import type { ModelDefinition } from '@lib/model/types';
 
 import { mapRecord } from '@lib/utils';
 

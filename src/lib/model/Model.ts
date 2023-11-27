@@ -1,15 +1,14 @@
 import type { ModelDefinition } from './types.js';
 
-import { genGraphQLType } from './schema.js';
-import { genDatabaseModel } from './database.js';
+import { genDatabaseModel, genGraphQLType } from './gen';
 
 export default class Model {
-  private _type;
   private _model;
+  private _type;
 
   constructor(args: ModelDefinition) {
-    this._type = genGraphQLType(args);
     this._model = genDatabaseModel(args);
+    this._type = genGraphQLType(args);
   }
 
   get name() {
@@ -17,16 +16,16 @@ export default class Model {
   }
 
   /**
-   * @returns The Model's GraphQL type
-   */
-  get type() {
-    return this._type;
-  }
-
-  /**
    * @returns The sequelize Model
    */
   get model() {
     return this._model;
+  }
+
+  /**
+   * @returns The Model's GraphQL type
+   */
+  get type() {
+    return this._type;
   }
 }
