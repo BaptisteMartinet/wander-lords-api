@@ -8,7 +8,7 @@ import type {
 import Model, { Int, String, Boolean } from '@lib/model';
 import sequelize from '@core/sequelize.js';
 
-export interface UserInstance extends SequelizeModel<InferAttributes<UserInstance>, InferCreationAttributes<UserInstance>> {
+export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
   id: CreationOptional<number>;
   testInt: number;
   testString: string;
@@ -16,7 +16,7 @@ export interface UserInstance extends SequelizeModel<InferAttributes<UserInstanc
   testBool: boolean;
 }
 
-const User = new Model<UserInstance>({
+const User = new Model<UserModel>({
   name: 'User',
   fields: {
     testInt: { type: Int, allowNull: true, exposed: true },
