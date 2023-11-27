@@ -1,4 +1,4 @@
-import Model, { Int, String, Boolean } from '@lib/Model';
+import Model, { Int, String, Boolean } from '@lib/model';
 import sequelize from '@core/sequelize.js';
 
 export default new Model({
