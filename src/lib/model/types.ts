@@ -1,4 +1,4 @@
-import type { Sequelize, DataType } from 'sequelize';
+import type { Sequelize, DataType, ModelIndexesOptions } from 'sequelize';
 import type { GraphQLScalarType } from 'graphql';
 
 export interface FieldType {
@@ -22,4 +22,5 @@ export interface ModelDefinition {
   timestamps: boolean,
   description?: string,
   tableName?: string,
+  indexes?: readonly ModelIndexesOptions[],
 }
