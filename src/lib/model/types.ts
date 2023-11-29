@@ -21,4 +21,5 @@ export interface ModelDefinition {
   fields: Record<string, FieldDefinition>,
   timestamps: boolean,
   description?: string,
+  tableName?: string,
 }
