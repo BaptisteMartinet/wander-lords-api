@@ -1,10 +1,11 @@
 import type { ModelDefinition } from '@lib/model';
 
 import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord } from '@lib/utils';
 
 export function genGraphQLType(modelDefinition: ModelDefinition) {
-  const { name, description, fields } = modelDefinition;
+  const { name, description, fields, timestamps } = modelDefinition;
   const exposedFields = filterRecord(fields, field => field.exposed) as NonNullable<typeof fields>;
   const gqlFields = mapRecord(exposedFields, field => {
     const {
@@ -20,6 +21,11 @@ export function genGraphQLType(modelDefinition: ModelDefinition) {
       defaultValue,
     };
   });
+  if (timestamps)
+    Object.assign(gqlFields, {
+      createdAt: { type: new GraphQLNonNull(GraphlQLDate) },
+      updatedAt: { type: new GraphQLNonNull(GraphlQLDate) },
+    });
   return new GraphQLObjectType({
     name,
     description,
