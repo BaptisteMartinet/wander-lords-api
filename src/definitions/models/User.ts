@@ -6,7 +6,7 @@ import type {
 } from 'sequelize';
 
 import { GraphQLBoolean } from 'graphql';
-import Model, { Int, String, Boolean } from '@lib/model';
+import Model, { Int, String, Boolean } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
 
 export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {

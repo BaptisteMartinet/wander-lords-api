@@ -1,4 +1,4 @@
-import type { ModelDefinition } from '@lib/model';
+import type { ModelDefinition } from '@lib/definitions';
 
 import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphlQLDate } from '@lib/graphql';

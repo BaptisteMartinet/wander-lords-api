@@ -1,5 +1,5 @@
 import type { Model as SequelizeModel } from 'sequelize';
-import type { ModelDefinition } from '@lib/model/types';
+import type { ModelDefinition } from '@lib/definitions';
 
 import { mapRecord } from '@lib/utils';
 
