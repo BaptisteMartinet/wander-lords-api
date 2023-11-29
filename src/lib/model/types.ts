@@ -16,10 +16,10 @@ export interface FieldDefinition {
 }
 
 export interface ModelDefinition {
-  sequelize: Sequelize,
   name: string,
   fields: Record<string, FieldDefinition>,
   timestamps: boolean,
+  sequelize: Sequelize,
   description?: string,
   tableName?: string,
   indexes?: readonly ModelIndexesOptions[],
