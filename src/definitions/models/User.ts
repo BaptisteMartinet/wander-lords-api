@@ -33,6 +33,7 @@ const User = new Model<UserModel>({
   }),
   indexes: [{ fields: ['email'], unique: true }],
   timestamps: true,
+  paranoid: true,
   sequelize,
 });
 
