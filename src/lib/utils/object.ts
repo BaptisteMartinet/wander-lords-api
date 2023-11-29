@@ -1,5 +1,5 @@
 export function mapRecord<K extends string, T, U>(obj: Record<K, T>, fn: (value: T) => U) {
-  const newObj: Record<string, U> = {};
+  const newObj = {} as Record<K, U>;
 
   for (const key in obj) {
     const value = obj[key];
