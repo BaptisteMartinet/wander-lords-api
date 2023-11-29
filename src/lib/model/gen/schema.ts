@@ -5,22 +5,22 @@ import { mapRecord, filterRecord } from '@lib/utils';
 
 export function genGraphQLType(modelDefinition: ModelDefinition) {
   const { name, description, fields } = modelDefinition;
-  const exposedFields = filterRecord(fields, field => field.exposed);
+  const exposedFields = filterRecord(fields, field => field.exposed) as NonNullable<typeof fields>;
+  const gqlFields = mapRecord(exposedFields, field => {
+    const {
+      type,
+      defaultValue,
+      description,
+    } = field;
+    return {
+      type: type.gqlType,
+      description,
+      defaultValue,
+    };
+  });
   return new GraphQLObjectType({
     name,
     description,
-    fields: mapRecord(exposedFields, field => {
-      const {
-        type,
-        defaultValue,
-        description,
-      } = field;
-
-      return {
-        type: type.gqlType,
-        description,
-        defaultValue,
-      };
-    }),
+    fields: gqlFields,
   });
 }
