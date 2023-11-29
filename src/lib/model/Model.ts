@@ -3,12 +3,12 @@ import type { ModelDefinition } from './types.js';
 
 import { genDatabaseModel, genGraphQLType } from './gen';
 
-export default class Model<ModelType extends SequelizeModel> {
+export default class Model<M extends SequelizeModel> {
   private _model;
   private _type;
 
-  constructor(args: ModelDefinition) {
-    this._model = genDatabaseModel<ModelType>(args);
+  constructor(args: ModelDefinition<M>) {
+    this._model = genDatabaseModel(args);
     this._type = genGraphQLType(args);
   }
 

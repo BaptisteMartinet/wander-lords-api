@@ -3,7 +3,7 @@ import type { ModelDefinition } from '@lib/model/types';
 
 import { mapRecord } from '@lib/utils';
 
-export function genDatabaseModel<T extends SequelizeModel>(definition: ModelDefinition) {
+export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefinition<M>) {
   const {
     sequelize,
     name,
@@ -21,7 +21,7 @@ export function genDatabaseModel<T extends SequelizeModel>(definition: ModelDefi
       defaultValue,
     };
   })
-  return sequelize.define<T>(name, attributes as never, {
+  return sequelize.define<M>(name, attributes as never, {
     tableName,
     timestamps,
     indexes,
