@@ -23,4 +23,5 @@ export interface ModelDefinition {
   description?: string,
   tableName?: string,
   indexes?: readonly ModelIndexesOptions[],
+  paranoid?: boolean,
 }

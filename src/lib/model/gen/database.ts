@@ -4,7 +4,15 @@ import type { ModelDefinition } from '@lib/model/types';
 import { mapRecord } from '@lib/utils';
 
 export function genDatabaseModel<T extends SequelizeModel>(definition: ModelDefinition) {
-  const { sequelize, name, fields, timestamps, tableName, indexes } = definition;
+  const {
+    sequelize,
+    name,
+    fields,
+    timestamps,
+    tableName,
+    indexes,
+    paranoid,
+  } = definition;
   const attributes = mapRecord(fields, (field) => {
     const { type, allowNull, defaultValue } = field;
     return {
@@ -17,6 +25,7 @@ export function genDatabaseModel<T extends SequelizeModel>(definition: ModelDefi
     tableName,
     timestamps,
     indexes,
+    paranoid,
     freezeTableName: true,
   });
 }
