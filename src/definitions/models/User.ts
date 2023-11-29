@@ -23,7 +23,9 @@ const User = new Model<UserModel>({
     testString: { type: String, allowNull: false, exposed: true, description: 'coucou' },
     testUnexposed: { type: Int, allowNull: false, exposed: false },
     testBool: { type: Boolean, allowNull: false, defaultValue: true, exposed: true },
+    email: { type: String, allowNull: false, exposed: true },
   },
+  indexes: [{ fields: ['email'], unique: true }],
   timestamps: true,
   sequelize,
 });
