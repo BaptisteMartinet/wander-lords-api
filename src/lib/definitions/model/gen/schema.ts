@@ -5,7 +5,7 @@ import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord, unthunk } from '@lib/utils';
 
 export function genGraphQLType(modelDefinition: ModelDefinition<never>) {
-  const { name, description, fields, timestamps, customFields } = modelDefinition;
+  const { name, description, fields, customFields, timestamps } = modelDefinition;
   const exposedFields = filterRecord(fields, field => field.exposed) as NonNullable<typeof fields>;
   const gqlFields = mapRecord(exposedFields, field => {
     const {
