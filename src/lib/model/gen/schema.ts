@@ -1,6 +1,6 @@
 import type { ModelDefinition } from '@lib/model';
 
-import { GraphQLObjectType } from 'graphql';
+import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { mapRecord, filterRecord } from '@lib/utils';
 
 export function genGraphQLType(modelDefinition: ModelDefinition) {
@@ -8,12 +8,13 @@ export function genGraphQLType(modelDefinition: ModelDefinition) {
   const exposedFields = filterRecord(fields, field => field.exposed) as NonNullable<typeof fields>;
   const gqlFields = mapRecord(exposedFields, field => {
     const {
-      type,
+      type: { gqlType },
       defaultValue,
       description,
+      allowNull,
     } = field;
     return {
-      type: type.gqlType,
+      type: allowNull ? gqlType : new GraphQLNonNull(gqlType),
       description,
       defaultValue,
     };
