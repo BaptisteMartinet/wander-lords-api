@@ -22,7 +22,7 @@ const User = new Model<UserModel>({
     testInt: { type: Int, allowNull: true, exposed: true },
     testString: { type: String, allowNull: false, exposed: true, description: 'coucou' },
     testUnexposed: { type: Int, allowNull: false, exposed: false },
-    testBool: { type: Boolean, allowNull: false, defaultValue: 12, exposed: true },
+    testBool: { type: Boolean, allowNull: false, defaultValue: true, exposed: true },
   },
   timestamps: true,
   sequelize,
