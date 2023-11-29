@@ -10,12 +10,8 @@ export function mapRecord<
   return newObj;
 }
 
-export function filterRecord<
-  KeyType extends string,
-  ValueType,
-  ObjectType extends Record<KeyType, ValueType>
->(obj: ObjectType, fn: (value: ValueType) => boolean) {
-  const newObj: Partial<ObjectType> = {};
+export function filterRecord<K extends string, V>(obj: Record<K, V>, fn: (value: V) => boolean) {
+  const newObj: Partial<Record<K, V>> = {};
   for (const key in obj) {
     const value = obj[key];
     if (fn(value))
