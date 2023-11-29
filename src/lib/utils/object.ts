@@ -1,6 +1,7 @@
 export function mapRecord<
   KeyType extends string,
-  ValueType, OutputType
+  ValueType,
+  OutputType,
 >(obj: Record<KeyType, ValueType>, fn: (value: ValueType) => OutputType) {
   const newObj = {} as Record<KeyType, OutputType>;
   for (const key in obj) {
