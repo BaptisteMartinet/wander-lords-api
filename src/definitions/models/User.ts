@@ -14,6 +14,7 @@ export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, In
   testString: string;
   testUnexposed: number;
   testBool: boolean;
+  email: string;
 }
 
 const User = new Model<UserModel>({
