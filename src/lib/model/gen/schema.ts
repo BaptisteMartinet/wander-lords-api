@@ -13,8 +13,9 @@ export function genGraphQLType(modelDefinition: ModelDefinition) {
       description,
       allowNull,
     } = field;
+    const type = allowNull ? gqlType : new GraphQLNonNull(gqlType);
     return {
-      type: allowNull ? gqlType : new GraphQLNonNull(gqlType),
+      type,
       description,
       defaultValue,
     };
