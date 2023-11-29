@@ -5,6 +5,7 @@ import type {
   CreationOptional,
 } from 'sequelize';
 
+import { GraphQLBoolean } from 'graphql';
 import Model, { Int, String, Boolean } from '@lib/model';
 import sequelize from '@core/sequelize.js';
 
@@ -26,6 +27,14 @@ const User = new Model<UserModel>({
     testBool: { type: Boolean, allowNull: false, defaultValue: true, exposed: true },
     email: { type: String, allowNull: false, exposed: true },
   },
+  customFields: () => ({
+    testCustomField: {
+      type: GraphQLBoolean,
+      resolve(source) {
+        return source.testBool;
+      },
+    },
+  }),
   indexes: [{ fields: ['email'], unique: true }],
   timestamps: true,
   sequelize,
