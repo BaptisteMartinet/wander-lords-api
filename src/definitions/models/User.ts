@@ -5,33 +5,29 @@ import type {
   CreationOptional,
 } from 'sequelize';
 
-import { GraphQLBoolean } from 'graphql';
-import Model, { Int, String, Boolean } from '@lib/definitions';
+import { GraphQLInt, GraphQLNonNull } from 'graphql';
+import Model, { Int, String } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
 
 export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
   id: CreationOptional<number>;
-  testInt: number;
-  testString: string;
-  testUnexposed: number;
-  testBool: boolean;
+  username: string;
   email: string;
+  position: CreationOptional<number>;
 }
 
 const User = new Model<UserModel>({
   name: 'User',
   fields: {
-    testInt: { type: Int, allowNull: true, exposed: true },
-    testString: { type: String, allowNull: false, exposed: true, description: 'coucou' },
-    testUnexposed: { type: Int, allowNull: false, exposed: false },
-    testBool: { type: Boolean, allowNull: false, defaultValue: true, exposed: true },
+    username: { type: String, allowNull: false, exposed: true  },
     email: { type: String, allowNull: false, exposed: true },
+    position: { type: Int, allowNull: false, defaultValue: 12, exposed: false },
   },
   customFields: () => ({
-    testCustomField: {
-      type: GraphQLBoolean,
+    positionGetter: {
+      type: new GraphQLNonNull(GraphQLInt),
       resolve(source) {
-        return source.testBool;
+        return source.position;
       },
     },
   }),

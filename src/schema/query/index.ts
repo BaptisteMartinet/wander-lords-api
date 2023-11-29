@@ -8,7 +8,7 @@ export default new GraphQLObjectType({
     users: {
       type: new GraphQLNonNullList(User.type),
       resolve() {
-        return User.model.findAll({ where: { testBool: true } });
+        return User.model.findAll();
       }
     },
   },
