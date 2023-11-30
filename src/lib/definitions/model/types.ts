@@ -4,11 +4,15 @@ import type {
   DataType,
   ModelIndexesOptions,
 } from 'sequelize';
-import type { GraphQLScalarType, GraphQLFieldConfig, ThunkObjMap } from 'graphql';
+import type {
+  GraphQLOutputType,
+  GraphQLFieldConfig,
+  ThunkObjMap,
+} from 'graphql';
 
 export interface FieldType {
   identifier: string,
-  gqlType: GraphQLScalarType,
+  gqlType: GraphQLOutputType,
   sequelizeType: DataType,
 }
 
