@@ -6,7 +6,7 @@ import type {
 } from 'sequelize';
 
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
-import Model, { Int, String } from '@lib/definitions';
+import Model, { INT, STRING } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
 
 export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
@@ -19,9 +19,9 @@ export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, In
 const User = new Model<UserModel>({
   name: 'User',
   fields: {
-    username: { type: String, allowNull: false, exposed: true  },
-    email: { type: String, allowNull: false, exposed: true },
-    position: { type: Int, allowNull: false, defaultValue: 12, exposed: false },
+    username: { type: STRING, allowNull: false, exposed: true  },
+    email: { type: STRING, allowNull: false, exposed: true },
+    position: { type: INT, allowNull: false, defaultValue: 12, exposed: false },
   },
   customFields: () => ({
     positionGetter: {
