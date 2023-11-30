@@ -1,6 +1,6 @@
 import type { ModelDefinition } from '@lib/definitions';
 
-import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord, unthunk } from '@lib/utils';
 
@@ -20,6 +20,9 @@ export function genGraphQLType(modelDefinition: ModelDefinition<never>) {
       description,
       defaultValue,
     };
+  });
+  Object.assign(gqlFields, {
+    id: { type: new GraphQLNonNull(GraphQLInt) },
   });
   if (customFields)
     Object.assign(gqlFields, unthunk(customFields));
