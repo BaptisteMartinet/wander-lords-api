@@ -7,8 +7,8 @@ import type {
 
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
 import Model, { INT, STRING } from '@lib/definitions';
-import { RoleEnum, Role } from '@definitions/enums';
 import sequelize from '@core/sequelize.js';
+import { RoleEnum, Role } from '@definitions/enums';
 
 export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
   id: CreationOptional<number>;
