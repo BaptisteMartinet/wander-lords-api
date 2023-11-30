@@ -7,6 +7,7 @@ import type {
 
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
 import Model, { INT, STRING } from '@lib/definitions';
+import { RoleEnum, Role } from '@definitions/enums';
 import sequelize from '@core/sequelize.js';
 
 export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
@@ -14,6 +15,7 @@ export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, In
   username: string;
   email: string;
   position: CreationOptional<number>;
+  role: Role,
 }
 
 const User = new Model<UserModel>({
@@ -22,6 +24,7 @@ const User = new Model<UserModel>({
     username: { type: STRING, allowNull: false, exposed: true  },
     email: { type: STRING, allowNull: false, exposed: true },
     position: { type: INT, allowNull: false, defaultValue: 12, exposed: false },
+    role: { type: RoleEnum, allowNull: false, defaultValue: Role.Admin, exposed: true },
   },
   customFields: () => ({
     positionGetter: {
