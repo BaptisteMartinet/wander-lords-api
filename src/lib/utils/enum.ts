@@ -1,7 +1,7 @@
 import { filterRecord } from './object';
 
 export type EnumValueType = number | string;
-export type EnumType<KeyType extends string> = Record<KeyType, EnumValueType>;
+export type EnumType<KeyType extends string = string> = Record<KeyType, EnumValueType>;
 
 export function enumEntries<K extends string>(value: EnumType<K>)
 {
