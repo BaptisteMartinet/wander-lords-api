@@ -7,20 +7,20 @@ import {
 } from 'graphql';
 import { DataTypes } from 'sequelize';
 
-export const Int: FieldType = {
-  identifier: 'Int',
+export const INT: FieldType = {
+  identifier: 'INT',
   gqlType: GraphQLInt,
   sequelizeType: DataTypes.INTEGER,
 } as const;
 
-export const String: FieldType = {
-  identifier: 'String',
+export const STRING: FieldType = {
+  identifier: 'STRING',
   gqlType: GraphQLString,
   sequelizeType: DataTypes.STRING,
 } as const;
 
-export const Boolean: FieldType = {
-  identifier: 'Boolean',
+export const BOOLEAN: FieldType = {
+  identifier: 'BOOLEAN',
   gqlType: GraphQLBoolean,
   sequelizeType: DataTypes.BOOLEAN,
 } as const;
