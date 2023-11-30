@@ -28,6 +28,23 @@ export const BOOLEAN: FieldType = {
   sequelizeType: DataTypes.BOOLEAN,
 } as const;
 
+/**
+ * Takes an enum and build its FieldType
+ *
+ * @example
+ *
+ * ```ts
+ * enum Role {
+ *  Manager = 'Manager',
+ *  Admin = 'Admin',
+ * }
+ * const RoleEnum = makeEnum({
+ *  name: 'Role',
+ *  values: Role,
+ * });
+ * console.log(RoleEnum.gqlType, RoleEnum.sequelizeType);
+ * ```
+ */
 export function makeEnum(
   args: {
     name: string,
