@@ -5,14 +5,15 @@ import type {
   ModelIndexesOptions,
 } from 'sequelize';
 import type {
-  GraphQLOutputType,
   GraphQLFieldConfig,
   ThunkObjMap,
+  GraphQLEnumType,
+  GraphQLScalarType,
 } from 'graphql';
 
 export interface FieldType {
   identifier: string,
-  gqlType: GraphQLOutputType,
+  gqlType: GraphQLScalarType | GraphQLEnumType, // TODO infer typing?
   sequelizeType: DataType,
 }
 
