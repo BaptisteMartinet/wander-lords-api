@@ -26,6 +26,11 @@ const User = new Model<UserModel>({
     position: { type: INT, allowNull: false, defaultValue: 12, exposed: false },
     role: { type: RoleEnum, allowNull: false, defaultValue: Role.Admin, exposed: true },
   },
+  associations: () => ({
+    posts: {
+      model: require('./Post'),
+    },
+  }),
   customFields: () => ({
     positionGetter: {
       type: new GraphQLNonNull(GraphQLInt),

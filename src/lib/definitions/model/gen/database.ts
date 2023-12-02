@@ -20,7 +20,7 @@ export function genModelAssociations<M extends SequelizeModel>(
   associations: Record<string, AssociationDefinition>,
 ) {
   for (const [key, association] of Object.entries(associations)) {
-    console.log(key, association.model.name);
+    console.log(key, association.model);
   }
 }
 

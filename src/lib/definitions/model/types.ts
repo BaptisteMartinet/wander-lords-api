@@ -28,7 +28,7 @@ export interface FieldDefinition {
 }
 
 export interface AssociationDefinition {
-  model: Model<never>,
+  model: Model<any>,
 }
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
