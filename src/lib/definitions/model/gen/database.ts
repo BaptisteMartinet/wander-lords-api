@@ -1,18 +1,19 @@
 import type { Model as SequelizeModel } from 'sequelize';
 import type { ModelDefinition } from '@lib/definitions';
 
-import { mapRecord } from '@lib/utils';
+import { mapRecord, unthunk } from '@lib/utils';
 
 export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefinition<M>) {
   const {
     sequelize,
     name,
-    fields,
+    fields: fieldsThunk,
     timestamps,
     tableName,
     indexes,
     paranoid,
   } = definition;
+  const fields = unthunk(fieldsThunk);
   const attributes = mapRecord(fields, (field) => {
     const { type, allowNull, defaultValue } = field;
     return {

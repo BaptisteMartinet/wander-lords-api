@@ -1,3 +1,5 @@
+import type { ThunkObj } from '@lib/utils';
+
 import type {
   Sequelize,
   Model as SequelizeModel,
@@ -6,7 +8,6 @@ import type {
 } from 'sequelize';
 import type {
   GraphQLFieldConfig,
-  ThunkObjMap,
   GraphQLEnumType,
   GraphQLScalarType,
 } from 'graphql';
@@ -27,10 +28,10 @@ export interface FieldDefinition {
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
   name: string,
-  fields: Record<string, FieldDefinition>,
+  fields: ThunkObj<FieldDefinition>,
   timestamps: boolean,
   sequelize: Sequelize,
-  customFields?: ThunkObjMap<GraphQLFieldConfig<ModelType, unknown>>,
+  customFields?: ThunkObj<GraphQLFieldConfig<ModelType, unknown>>,
   description?: string,
   tableName?: string,
   indexes?: readonly ModelIndexesOptions[],
