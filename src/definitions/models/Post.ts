@@ -7,19 +7,21 @@ import {
 
 import Model, { STRING } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
+import { User } from '@definitions/models';
 
 export interface PostModel extends SequelizeModel<InferAttributes<PostModel>, InferCreationAttributes<PostModel>> {
   id: CreationOptional<number>;
   title: string;
 }
-const Post = new Model<PostModel>({
+
+const Post: Model<PostModel> = new Model<PostModel>({
   name: 'Post',
   fields: {
     title: { type: STRING, allowNull: false, exposed: true },
   },
   associations: () => ({
     user: {
-      model: require('./User'),
+      model: User,
     },
   }),
   timestamps: true,

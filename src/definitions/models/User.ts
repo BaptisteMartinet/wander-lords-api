@@ -8,6 +8,7 @@ import type {
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
 import Model, { INT, STRING } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
+import { Post } from '@definitions/models';
 import { RoleEnum, Role } from '@definitions/enums';
 
 export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
@@ -28,7 +29,7 @@ const User = new Model<UserModel>({
   },
   associations: () => ({
     posts: {
-      model: require('./Post'),
+      model: Post,
     },
   }),
   customFields: () => ({

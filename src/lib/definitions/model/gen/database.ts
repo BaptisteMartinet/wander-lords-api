@@ -20,7 +20,7 @@ export function genModelAssociations<M extends SequelizeModel>(
   associations: Record<string, AssociationDefinition>,
 ) {
   for (const [key, association] of Object.entries(associations)) {
-    console.log(key, association.model);
+    console.log(key, association.model.name);
   }
 }
 
@@ -44,6 +44,6 @@ export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefi
     freezeTableName: true,
   });
   if (associations !== undefined)
-    genModelAssociations(model, associations());
+    setTimeout(() => genModelAssociations(model, associations()), 0);
   return model;
 }
