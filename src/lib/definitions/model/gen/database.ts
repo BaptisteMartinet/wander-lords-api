@@ -17,9 +17,11 @@ export function makeModelAttributes(fields: Record<string, FieldDefinition>){
 
 export function genModelAssociations<M extends SequelizeModel>(
   model: ModelStatic<M>,
-  associations: AssociationDefinition,
+  associations: Record<string, AssociationDefinition>,
 ) {
-  console.log(associations); // TODO gen model associations
+  for (const [key, association] of Object.entries(associations)) {
+    console.log(key, association.model.name);
+  }
 }
 
 export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefinition<M>) {
