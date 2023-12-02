@@ -43,6 +43,13 @@ export const BOOLEAN: FieldType = {
  *  values: Role,
  * });
  * console.log(RoleEnum.gqlType, RoleEnum.sequelizeType);
+ *
+ * const User = new Model({
+ *  fields: {
+ *    role: { type: RoleEnum, allowNull: false, defaultValue: Role.Manager, exposed: true },
+ *  },
+ *  ...
+ * });
  * ```
  */
 export function makeEnum(
