@@ -11,6 +11,7 @@ import type {
   GraphQLEnumType,
   GraphQLScalarType,
 } from 'graphql';
+import type Model from './Model';
 
 export interface FieldType {
   identifier: string,
@@ -26,11 +27,16 @@ export interface FieldDefinition {
   description?: string,
 }
 
+export interface AssociationDefinition {
+  model: Model<never>,
+}
+
 export interface ModelDefinition<ModelType extends SequelizeModel> {
   name: string,
-  fields: ThunkObj<FieldDefinition>,
+  fields: Record<string, FieldDefinition>,
   timestamps: boolean,
   sequelize: Sequelize,
+  associations?: () => AssociationDefinition,
   customFields?: ThunkObj<GraphQLFieldConfig<ModelType, unknown>>,
   description?: string,
   tableName?: string,
