@@ -8,7 +8,7 @@ import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord } from '@lib/utils/object';
 import { unthunk } from '@lib/utils/thunk';
 
-function genModelColumnsFields(columns: Record<string, FieldDefinition>): GraphQLFieldConfigMap<unknown, unknown> {
+export function genModelColumnsFields(columns: Record<string, FieldDefinition>): GraphQLFieldConfigMap<unknown, unknown> {
   const exposedColumns = filterRecord(columns, column => column.exposed) as NonNullable<typeof columns>;
   return mapRecord(exposedColumns, field => {
     const {
@@ -26,7 +26,7 @@ function genModelColumnsFields(columns: Record<string, FieldDefinition>): GraphQ
   });
 }
 
-function genModelBaseFields(
+export function genModelBaseFields(
   args: {
     timestamps: boolean,
     paranoid?: boolean,
