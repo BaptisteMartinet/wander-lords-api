@@ -10,7 +10,6 @@ export default class Model<M extends SequelizeModel> {
 
   constructor(protected definition: ModelDefinition<M>) {
     this._model = genDatabaseModel(definition);
-    // this._type = genGraphQLType(args);
   }
 
   get name() {
