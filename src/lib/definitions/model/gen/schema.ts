@@ -1,11 +1,13 @@
-import type { ModelDefinition } from '@lib/definitions';
+import type Model from '@lib/definitions';
 
+import { Model as SequelizeModel } from 'sequelize';
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord } from '@lib/utils/object';
 import { unthunk } from '@lib/utils/thunk';
 
-export function genGraphQLType(modelDefinition: ModelDefinition<never>) {
+export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
+  const { definition } = model;
   const {
     name,
     description,
@@ -13,7 +15,7 @@ export function genGraphQLType(modelDefinition: ModelDefinition<never>) {
     customFields: customFieldsThunk,
     timestamps,
     paranoid,
-  } = modelDefinition;
+  } = definition;
   const fields = unthunk(fieldsThunk);
   const exposedFields = filterRecord(fields, field => field.exposed) as NonNullable<typeof fields>;
   const gqlFields = mapRecord(exposedFields, field => {

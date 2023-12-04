@@ -2,14 +2,20 @@ import type { Model as SequelizeModel } from 'sequelize';
 import type { ModelDefinition } from './types.js';
 
 import { GraphQLObjectType } from 'graphql';
-import { genDatabaseModel, genGraphQLType } from './gen';
+import { genDatabaseModel, genModelGraphQLType } from './gen';
 
 export default class Model<M extends SequelizeModel> {
+  private _definition;
   private _model;
   private _type: GraphQLObjectType | null = null;
 
-  constructor(protected definition: ModelDefinition<M>) {
+  constructor(definition: ModelDefinition<M>) {
+    this._definition = definition;
     this._model = genDatabaseModel(definition);
+  }
+
+  get definition() {
+    return this._definition;
   }
 
   get name() {
@@ -21,7 +27,7 @@ export default class Model<M extends SequelizeModel> {
    */
   get type() {
     if (!this._type)
-      this._type = genGraphQLType(this.definition);
+      this._type = genModelGraphQLType(this);
     return this._type;
   }
 
