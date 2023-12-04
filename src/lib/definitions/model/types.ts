@@ -30,6 +30,7 @@ export interface FieldDefinition {
 export interface AssociationDefinition {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   model: Model<any>,
+  // TODO association definition
 }
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
