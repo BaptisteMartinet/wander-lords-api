@@ -17,18 +17,18 @@ export default class Model<M extends SequelizeModel> {
   }
 
   /**
-   * @returns The sequelize Model
-   */
-  get model() {
-    return this._model;
-  }
-
-  /**
    * @returns The Model's GraphQL type
    */
   get type() {
     if (!this._type)
       this._type = genGraphQLType(this.definition);
     return this._type;
+  }
+
+  /**
+   * @returns The sequelize Model
+   */
+  get model() {
+    return this._model;
   }
 }
