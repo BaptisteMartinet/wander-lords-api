@@ -2,7 +2,8 @@ import type { ModelDefinition } from '@lib/definitions';
 
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphlQLDate } from '@lib/graphql';
-import { mapRecord, filterRecord, unthunk } from '@lib/utils';
+import { mapRecord, filterRecord } from '@lib/utils/object';
+import { unthunk } from '@lib/utils/thunk';
 
 export function genGraphQLType(modelDefinition: ModelDefinition<never>) {
   const {
@@ -33,7 +34,7 @@ export function genGraphQLType(modelDefinition: ModelDefinition<never>) {
     id: { type: new GraphQLNonNull(GraphQLInt) },
   });
   const customFields = unthunk(customFieldsThunk);
-  if (customFields)
+  if (customFields !== undefined)
     Object.assign(gqlFields, unthunk(customFields));
   if (timestamps)
     Object.assign(gqlFields, {

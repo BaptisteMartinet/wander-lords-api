@@ -1,7 +1,7 @@
 import type { Model as SequelizeModel, ModelStatic } from 'sequelize';
 import type { ModelDefinition, AssociationDefinition, FieldDefinition } from '@lib/definitions';
 
-import { mapRecord } from '@lib/utils';
+import { mapRecord } from '@lib/utils/object';
 
 export function makeModelAttributes(fields: Record<string, FieldDefinition>){
   const attributes = mapRecord(fields, (field) => {

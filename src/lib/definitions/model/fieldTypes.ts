@@ -1,4 +1,4 @@
-import type { EnumType } from '@lib/utils';
+import type { EnumType } from '@lib/utils/enum';
 import type { FieldType } from './types';
 
 import {
@@ -8,7 +8,8 @@ import {
   GraphQLEnumType,
 } from 'graphql';
 import { DataTypes } from 'sequelize';
-import { getEnumEntries, mapRecord } from '@lib/utils';
+import { mapRecord } from '@lib/utils/object';
+import { getEnumEntries } from '@lib/utils/enum';
 
 export const INT: FieldType = {
   identifier: 'INT',

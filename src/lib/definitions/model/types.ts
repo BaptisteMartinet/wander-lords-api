@@ -1,4 +1,4 @@
-import type { ThunkObj } from '@lib/utils';
+import type { ThunkObj } from '@lib/utils/thunk';
 
 import type {
   Sequelize,
