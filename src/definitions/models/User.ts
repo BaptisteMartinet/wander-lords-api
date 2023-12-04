@@ -20,7 +20,7 @@ export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, In
 
 const User: Model<UserModel> = new Model({
   name: 'User',
-  fields: {
+  columns: {
     username: { type: STRING, allowNull: false, exposed: true  },
     email: { type: STRING, allowNull: false, exposed: true },
     position: { type: INT, allowNull: false, defaultValue: 12, exposed: false },

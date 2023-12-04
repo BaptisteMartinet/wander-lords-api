@@ -16,7 +16,7 @@ export interface PostModel extends SequelizeModel<InferAttributes<PostModel>, In
 
 const Post: Model<PostModel> = new Model<PostModel>({
   name: 'Post',
-  fields: {
+  columns: {
     title: { type: STRING, allowNull: false, exposed: true },
   },
   associations: () => ({

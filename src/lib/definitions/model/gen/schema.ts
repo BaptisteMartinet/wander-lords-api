@@ -11,14 +11,14 @@ export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
   const {
     name,
     description,
-    fields: fieldsThunk,
+    columns: columnsThunk,
     customFields: customFieldsThunk,
     timestamps,
     paranoid,
   } = definition;
-  const fields = unthunk(fieldsThunk);
-  const exposedFields = filterRecord(fields, field => field.exposed) as NonNullable<typeof fields>;
-  const gqlFields = mapRecord(exposedFields, field => {
+  const columns = unthunk(columnsThunk);
+  const exposedColumns = filterRecord(columns, column => column.exposed) as NonNullable<typeof columns>;
+  const gqlFields = mapRecord(exposedColumns, field => {
     const {
       type: { gqlType },
       defaultValue,

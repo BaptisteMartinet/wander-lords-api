@@ -28,14 +28,14 @@ export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefi
   const {
     sequelize,
     name,
-    fields,
+    columns,
     timestamps,
     associations,
     tableName,
     indexes,
     paranoid,
   } = definition;
-  const attributes = makeModelAttributes(fields);
+  const attributes = makeModelAttributes(columns);
   const model = sequelize.define<M>(name, attributes as never, {
     tableName,
     timestamps,

@@ -34,7 +34,7 @@ export interface AssociationDefinition {
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
   name: string,
-  fields: Record<string, FieldDefinition>,
+  columns: Record<string, FieldDefinition>,
   timestamps: boolean,
   sequelize: Sequelize,
   associations?: () => Record<string, AssociationDefinition>,
