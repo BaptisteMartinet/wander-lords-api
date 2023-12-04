@@ -1,5 +1,5 @@
-import type { Model as SequelizeModel, ModelStatic } from 'sequelize';
-import type { ModelDefinition, AssociationDefinition, FieldDefinition } from '@lib/definitions';
+import type { Model as SequelizeModel } from 'sequelize';
+import type { ModelDefinition, FieldDefinition } from '@lib/definitions';
 
 import { mapRecord } from '@lib/utils/object';
 
@@ -15,22 +15,12 @@ export function makeModelAttributes(fields: Record<string, FieldDefinition>){
   return attributes;
 }
 
-export function genModelAssociations<M extends SequelizeModel>(
-  model: ModelStatic<M>,
-  associations: Record<string, AssociationDefinition>,
-) {
-  for (const [key, association] of Object.entries(associations)) {
-    console.log(key, association.model.name);
-  }
-}
-
 export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefinition<M>) {
   const {
     sequelize,
     name,
     columns,
     timestamps,
-    associations,
     tableName,
     indexes,
     paranoid,
@@ -43,7 +33,5 @@ export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefi
     paranoid,
     freezeTableName: true,
   });
-  if (associations !== undefined)
-    setTimeout(() => genModelAssociations(model, associations()), 0);
   return model;
 }
