@@ -12,7 +12,7 @@ export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
     name,
     description,
     columns: columnsThunk,
-    customFields: customFieldsThunk,
+    fields: fieldsThunk,
     timestamps,
     paranoid,
   } = definition;
@@ -35,9 +35,9 @@ export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
   Object.assign(gqlFields, {
     id: { type: new GraphQLNonNull(GraphQLInt) },
   });
-  const customFields = unthunk(customFieldsThunk);
-  if (customFields !== undefined)
-    Object.assign(gqlFields, unthunk(customFields));
+  const fields = unthunk(fieldsThunk);
+  if (fields !== undefined)
+    Object.assign(gqlFields, unthunk(fields));
   if (timestamps)
     Object.assign(gqlFields, {
       createdAt: { type: new GraphQLNonNull(GraphlQLDate) },

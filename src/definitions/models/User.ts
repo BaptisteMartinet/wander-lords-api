@@ -31,7 +31,7 @@ const User: Model<UserModel> = new Model({
       model: Post,
     },
   }),
-  customFields: () => ({
+  fields: () => ({
     positionGetter: {
       type: Post.type,
       resolve() {

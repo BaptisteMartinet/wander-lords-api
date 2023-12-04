@@ -38,7 +38,7 @@ export interface ModelDefinition<ModelType extends SequelizeModel> {
   timestamps: boolean,
   sequelize: Sequelize,
   associations?: () => Record<string, AssociationDefinition>,
-  customFields?: ThunkObj<GraphQLFieldConfig<ModelType, unknown>>,
+  fields?: ThunkObj<GraphQLFieldConfig<ModelType, unknown>>,
   description?: string,
   tableName?: string,
   indexes?: readonly ModelIndexesOptions[],
