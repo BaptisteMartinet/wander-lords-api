@@ -5,7 +5,6 @@ import type {
   CreationOptional,
 } from 'sequelize';
 
-import { GraphQLInt, GraphQLNonNull } from 'graphql';
 import Model, { INT, STRING } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
 import { Post } from '@definitions/models';
@@ -19,7 +18,7 @@ export interface UserModel extends SequelizeModel<InferAttributes<UserModel>, In
   role: Role,
 }
 
-const User = new Model<UserModel>({
+const User: Model<UserModel> = new Model({
   name: 'User',
   fields: {
     username: { type: STRING, allowNull: false, exposed: true  },
@@ -34,9 +33,9 @@ const User = new Model<UserModel>({
   }),
   customFields: () => ({
     positionGetter: {
-      type: new GraphQLNonNull(GraphQLInt),
-      resolve(source) {
-        return source.position;
+      type: Post.type,
+      resolve() {
+        return null;
       },
     },
   }),
