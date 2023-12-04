@@ -1,4 +1,6 @@
+import type { GraphQLFieldConfigMap } from 'graphql';
 import type Model from '@lib/definitions';
+import type { FieldDefinition } from '@lib/definitions';
 
 import { Model as SequelizeModel } from 'sequelize';
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
@@ -6,19 +8,9 @@ import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord } from '@lib/utils/object';
 import { unthunk } from '@lib/utils/thunk';
 
-export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
-  const { definition } = model;
-  const {
-    name,
-    description,
-    columns: columnsThunk,
-    fields: fieldsThunk,
-    timestamps,
-    paranoid,
-  } = definition;
-  const columns = unthunk(columnsThunk);
+function genModelColumnsFields(columns: Record<string, FieldDefinition>): GraphQLFieldConfigMap<unknown, unknown> {
   const exposedColumns = filterRecord(columns, column => column.exposed) as NonNullable<typeof columns>;
-  const gqlFields = mapRecord(exposedColumns, field => {
+  return mapRecord(exposedColumns, field => {
     const {
       type: { gqlType },
       defaultValue,
@@ -32,24 +24,42 @@ export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
       defaultValue,
     };
   });
-  Object.assign(gqlFields, {
+}
+
+function genModelBaseFields(
+  args: {
+    timestamps: boolean,
+    paranoid?: boolean,
+  },
+): GraphQLFieldConfigMap<unknown, unknown> {
+  const { timestamps, paranoid } = args;
+  return {
     id: { type: new GraphQLNonNull(GraphQLInt) },
-  });
-  const fields = unthunk(fieldsThunk);
-  if (fields !== undefined)
-    Object.assign(gqlFields, unthunk(fields));
-  if (timestamps)
-    Object.assign(gqlFields, {
+    ...(timestamps ? {
       createdAt: { type: new GraphQLNonNull(GraphlQLDate) },
       updatedAt: { type: new GraphQLNonNull(GraphlQLDate) },
-    });
-  if (paranoid === true)
-    Object.assign(gqlFields, {
-      deletedAt: { type: GraphlQLDate },
-    });
+    } : null),
+    ...(paranoid === true ? {
+      deletedAt: { type: new GraphQLNonNull(GraphlQLDate) },
+    } : null),
+  };
+}
+
+export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
+  const { definition } = model;
+  const {
+    name,
+    description,
+    columns,
+    fields,
+  } = definition;
   return new GraphQLObjectType({
     name,
     description,
-    fields: gqlFields,
+    fields: {
+      ...genModelBaseFields(definition),
+      ...genModelColumnsFields(columns),
+      ...(fields !== undefined ? unthunk(fields): null),
+    },
   });
 }
