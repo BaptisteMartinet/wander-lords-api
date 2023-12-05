@@ -27,10 +27,13 @@ export interface FieldDefinition {
   description?: string,
 }
 
+export type AssociationType = 'belongsTo' | 'hasOne' | 'hasMany'; // TODO belongsToMany
+
 export interface AssociationDefinition {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   model: Model<any>,
-  // TODO association definition
+  type: AssociationType,
+  exposed: boolean,
 }
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {

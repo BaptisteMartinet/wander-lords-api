@@ -29,6 +29,8 @@ const User: Model<UserModel> = new Model({
   associations: () => ({
     posts: {
       model: Post,
+      type: 'hasMany',
+      exposed: true,
     },
   }),
   fields: () => ({

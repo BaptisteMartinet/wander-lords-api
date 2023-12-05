@@ -22,6 +22,8 @@ const Post: Model<PostModel> = new Model<PostModel>({
   associations: () => ({
     user: {
       model: User,
+      type: 'belongsTo',
+      exposed: true,
     },
   }),
   timestamps: true,
