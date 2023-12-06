@@ -34,6 +34,7 @@ export interface AssociationDefinition {
   model: Model<any>,
   type: AssociationType,
   exposed: boolean,
+  foreignKey?: string,
 }
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
