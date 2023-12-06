@@ -59,7 +59,7 @@ export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
     fields: {
       ...genModelBaseFields(definition),
       ...genModelColumnsFields(columns),
-      ...(fields !== undefined ? unthunk(fields): null),
+      ...(unthunk(fields)),
     },
   });
 }
