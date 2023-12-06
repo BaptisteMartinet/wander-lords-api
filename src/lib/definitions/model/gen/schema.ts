@@ -1,8 +1,8 @@
+import type { Model as SequelizeModel, Association } from 'sequelize';
 import type { GraphQLFieldConfigMap } from 'graphql';
 import type Model from '@lib/definitions';
-import type { FieldDefinition } from '@lib/definitions';
+import type { FieldDefinition, AssociationDefinition } from '@lib/definitions';
 
-import { Model as SequelizeModel } from 'sequelize';
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord } from '@lib/utils/object';
@@ -45,8 +45,36 @@ export function genModelBaseFields(
   };
 }
 
+export function genModelAssociationsFields(associations: Map<string, [Association, AssociationDefinition]>) {
+  if (associations.size <= 0)
+    return {};
+  const ret: GraphQLFieldConfigMap<unknown, unknown> = {};
+  for (const [name, association_] of associations) {
+    const [association, associationDef] = association_;
+    const { exposed, type, model } = associationDef;
+    if (!exposed)
+      continue;
+    switch(type) {
+      case 'belongsTo':
+        ret[name] = {
+          type: model.type,
+          resolve(source) {
+            console.log('source: ', source, 'association: ', association);
+            // const where: Record<string, unknown> = {};
+            // where[association.foreignKey] = source[association.foreignKey];
+            // return model.model.findOne({ where });
+            return null;
+          },
+        };
+        break;
+      default: break; // TODO handle more association types gl hf bro
+    }
+  }
+  return ret;
+}
+
 export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
-  const { definition } = model;
+  const { definition, associations } = model;
   const {
     name,
     description,
@@ -56,10 +84,11 @@ export function genModelGraphQLType<M extends SequelizeModel>(model: Model<M>) {
   return new GraphQLObjectType({
     name,
     description,
-    fields: {
+    fields: () => ({
       ...genModelBaseFields(definition),
       ...genModelColumnsFields(columns),
+      ...genModelAssociationsFields(associations),
       ...(unthunk(fields)),
-    },
+    }),
   });
 }
