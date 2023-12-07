@@ -67,7 +67,18 @@ export function genModelAssociationsFields(associations: Map<string, [Associatio
           },
         };
         break;
-      default: break; // TODO handle more association types gl hf bro
+      case 'hasOne':
+        ret[name] = {
+          type: targetModel.type,
+          resolve(source) {
+            const targetModelPk = source[association.foreignKey];
+            if (targetModelPk === null || targetModelPk === undefined)
+              return null;
+            return targetModel.model.findByPk(targetModelPk);
+          }
+        };
+        break;
+      default: break; // TODO handle hasMany association types gl hf bro
     }
   }
   return ret;
