@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Model as SequelizeModel, Association } from 'sequelize';
 import type { GraphQLFieldConfigMap } from 'graphql';
 import type Model from '@lib/definitions';
@@ -48,22 +49,21 @@ export function genModelBaseFields(
 export function genModelAssociationsFields(associations: Map<string, [Association, AssociationDefinition]>) {
   if (associations.size <= 0)
     return {};
-  const ret: GraphQLFieldConfigMap<unknown, unknown> = {};
+  const ret: GraphQLFieldConfigMap<any, unknown> = {};
   for (const [name, association_] of associations) {
     const [association, associationDef] = association_;
-    const { exposed, type, model } = associationDef;
+    const { exposed, type, model: targetModel } = associationDef;
     if (!exposed)
       continue;
     switch(type) {
       case 'belongsTo':
         ret[name] = {
-          type: model.type,
+          type: targetModel.type,
           resolve(source) {
-            console.log('source: ', source, 'association: ', association);
-            // const where: Record<string, unknown> = {};
-            // where[association.foreignKey] = source[association.foreignKey];
-            // return model.model.findOne({ where });
-            return null;
+            const targetModelPk = source[association.foreignKey];
+            if (targetModelPk === null || targetModelPk === undefined)
+              return null;
+            return targetModel.model.findByPk(targetModelPk);
           },
         };
         break;
