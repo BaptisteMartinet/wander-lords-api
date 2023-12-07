@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ThunkObj } from '@lib/utils/thunk';
 
 import type {
@@ -27,10 +28,9 @@ export interface FieldDefinition {
   description?: string,
 }
 
-export type AssociationType = 'belongsTo' | 'hasOne' | 'hasMany'; // TODO belongsToMany
+export type AssociationType = 'belongsTo' | 'hasOne' | 'hasMany';
 
 export interface AssociationDefinition {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   model: Model<any>,
   type: AssociationType,
   exposed: boolean,
