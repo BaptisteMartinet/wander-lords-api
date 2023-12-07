@@ -34,16 +34,17 @@ export default class Model<M extends SequelizeModel> {
     for (const [name, association] of Object.entries(associationDefinitions)) {
       if (this._associations.has(name))
         throw new Error(`Model#${this.name} has duplicated association name ${name}`);
-      const { model: targetModel, type, foreignKey } = association;
+      const { model: targetModel, type, foreignKey, deleteCascade } = association;
+      const onDelete = (deleteCascade === true ? 'CASCADE' : 'SET NULL');
       switch(type) {
         case 'belongsTo':
-          this._associations.set(name, [this._model.belongsTo(targetModel.model, { as: name, foreignKey }), association]);
+          this._associations.set(name, [this._model.belongsTo(targetModel.model, { as: name, foreignKey, onDelete }), association]);
           break;
         case 'hasOne':
-          this._associations.set(name, [this._model.hasOne(targetModel.model, { as: name, foreignKey }), association]);
+          this._associations.set(name, [this._model.hasOne(targetModel.model, { as: name, foreignKey, onDelete }), association]);
           break;
         case 'hasMany':
-          this._associations.set(name, [this._model.hasMany(targetModel.model, { as: name, foreignKey }), association]);
+          this._associations.set(name, [this._model.hasMany(targetModel.model, { as: name, foreignKey, onDelete }), association]);
           break;
         default:
           throw new Error(`Invalid association type: ${type}`);

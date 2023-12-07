@@ -35,6 +35,7 @@ export interface AssociationDefinition {
   type: AssociationType,
   exposed: boolean,
   foreignKey?: string,
+  deleteCascade?: boolean,
 }
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
