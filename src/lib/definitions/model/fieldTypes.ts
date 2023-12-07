@@ -11,7 +11,7 @@ import { DataTypes } from 'sequelize';
 import { mapRecord } from '@lib/utils/object';
 import { getEnumEntries } from '@lib/utils/enum';
 
-export const INT: FieldType = {
+export const INTEGER: FieldType = {
   identifier: 'INT',
   gqlType: GraphQLInt,
   sequelizeType: DataTypes.INTEGER,
