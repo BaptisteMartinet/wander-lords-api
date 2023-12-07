@@ -13,7 +13,7 @@ async function main() {
   await sequelize.authenticate();
 
   // TODO migration script
-  await sequelize.sync({ force: true });
+  await sequelize.sync();
   console.warn('Database synchronized');
 
   const app = express();
