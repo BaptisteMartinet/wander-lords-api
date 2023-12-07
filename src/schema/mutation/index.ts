@@ -1,25 +1,31 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { User } from '@definitions/models';
+import { GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { Author, Book } from '@definitions/models';
 import { RoleEnum } from '@definitions/enums';
 
 export default new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    createUser: {
-      type: new GraphQLNonNull(User.type),
+    createAuthor: {
+      type: new GraphQLNonNull(Author.type),
       args: {
-        username: { type: new GraphQLNonNull(GraphQLString) },
-        email: { type: new GraphQLNonNull(GraphQLString) },
-        role: { type: RoleEnum.gqlType },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        role: { type: RoleEnum.gqlType }
       },
       resolve(_, args) {
-        const { username, email, role } = args;
-        console.log(role);
-        return User.model.create({
-          username,
-          email,
-          role,
-        });
+        const { name, role } = args;
+        return Author.model.create({ name, role });
+      },
+    },
+
+    createBook: {
+      type: new GraphQLNonNull(Book.type),
+      args: {
+        authorId: { type: new GraphQLNonNull(GraphQLInt) },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(_, args) {
+        const { authorId, title } = args;
+        return Book.model.create({ title, authorId });
       },
     },
   },

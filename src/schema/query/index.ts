@@ -1,15 +1,21 @@
 import { GraphQLObjectType } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
-import { User } from '@definitions/models';
+import { Author, Book } from '@definitions/models';
 
 export default new GraphQLObjectType({
   name: 'Query',
   fields: {
-    users: {
-      type: new GraphQLNonNullList(User.type),
+    authors: {
+      type: new GraphQLNonNullList(Author.type),
       resolve() {
-        return User.model.findAll();
+        return Author.model.findAll();
       }
+    },
+    books: {
+      type: new GraphQLNonNullList(Book.type),
+      resolve() {
+        return Book.model.findAll();
+      },
     },
   },
 });
