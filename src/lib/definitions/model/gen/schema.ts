@@ -5,7 +5,7 @@ import type Model from '@lib/definitions';
 import type { FieldDefinition, AssociationDefinition } from '@lib/definitions';
 
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
-import { GraphlQLDate } from '@lib/graphql';
+import { GraphQLNonNullList, GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord } from '@lib/utils/object';
 import { unthunk } from '@lib/utils/thunk';
 
@@ -78,7 +78,17 @@ export function genModelAssociationsFields(associations: Map<string, [Associatio
           }
         };
         break;
-      default: break; // TODO handle hasMany association types gl hf bro
+      case 'hasMany':
+        ret[name] = {
+          type: new GraphQLNonNullList(targetModel.type),
+          resolve(source) {
+            const where: Record<string, unknown> = {};
+            where[association.foreignKey] = source.id;
+            return targetModel.model.findAll({ where });
+          },
+        };
+        break;
+      default: throw new Error(`Unsupported association type: ${type}`);
     }
   }
   return ret;
