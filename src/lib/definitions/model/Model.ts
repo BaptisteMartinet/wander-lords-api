@@ -9,7 +9,7 @@ export default class Model<M extends SequelizeModel> {
   private _definition;
   private _model;
   private _type: GraphQLObjectType | null = null;
-  private _associations: Map<string, [Association, AssociationDefinition]> | null = null;
+  private _associations: Map<string, { sequelizeAssociation: Association, associationDef: AssociationDefinition }> | null = null;
 
   constructor(definition: ModelDefinition<M>) {
     this._definition = definition;
@@ -46,7 +46,7 @@ export default class Model<M extends SequelizeModel> {
       if (this._associations.has(associationName))
         throw new Error(`Model#${this.name} has duplicated association name ${associationName}`);
       const sequelizeAssociation = this.genAssociation(associationName, associationDef);
-      this._associations.set(associationName, [sequelizeAssociation, associationDef]);
+      this._associations.set(associationName, { sequelizeAssociation, associationDef });
     }
     return this._associations;
   }
