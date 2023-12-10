@@ -46,12 +46,12 @@ export function genModelBaseFields(
   };
 }
 
-export function genModelAssociationsFields(associations: Map<string, [Association, AssociationDefinition]>) {
+export function genModelAssociationsFields(associations: Map<string, { sequelizeAssociation: Association, associationDef: AssociationDefinition }>) {
   if (associations.size <= 0)
     return {};
   const ret: GraphQLFieldConfigMap<any, unknown> = {};
   for (const [name, association_] of associations) {
-    const [association, associationDef] = association_;
+    const { sequelizeAssociation, associationDef } = association_;
     const { exposed, type, model: targetModel } = associationDef;
     if (!exposed)
       continue;
@@ -60,7 +60,7 @@ export function genModelAssociationsFields(associations: Map<string, [Associatio
         ret[name] = {
           type: targetModel.type,
           resolve(source) {
-            const targetModelPk = source[association.foreignKey];
+            const targetModelPk = source[sequelizeAssociation.foreignKey];
             if (targetModelPk === null || targetModelPk === undefined)
               return null;
             return targetModel.model.findByPk(targetModelPk);
@@ -71,7 +71,7 @@ export function genModelAssociationsFields(associations: Map<string, [Associatio
         ret[name] = {
           type: targetModel.type,
           resolve(source) {
-            const targetModelPk = source[association.foreignKey];
+            const targetModelPk = source[sequelizeAssociation.foreignKey];
             if (targetModelPk === null || targetModelPk === undefined)
               return null;
             return targetModel.model.findByPk(targetModelPk);
@@ -83,7 +83,7 @@ export function genModelAssociationsFields(associations: Map<string, [Associatio
           type: new GraphQLNonNullList(targetModel.type),
           resolve(source) {
             const where: Record<string, unknown> = {};
-            where[association.foreignKey] = source.id;
+            where[sequelizeAssociation.foreignKey] = source.id;
             return targetModel.model.findAll({ where });
           },
         };
