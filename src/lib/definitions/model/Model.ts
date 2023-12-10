@@ -1,4 +1,4 @@
-import type { Model as SequelizeModel, Association } from 'sequelize';
+import type { Model as SequelizeModel, Association, Identifier } from 'sequelize';
 import type { ModelDefinition, AssociationDefinition } from './types.js';
 
 import { GraphQLObjectType } from 'graphql';
@@ -65,5 +65,22 @@ export default class Model<M extends SequelizeModel> {
    */
   get model() {
     return this._model;
+  }
+
+  public formatIdentifier(identifier: Identifier) {
+    return this.name + '#' + identifier;
+  }
+
+  public async ensureExistence(identifier: Identifier) {
+    const instance = await this.model.findByPk(identifier);
+    if (instance === null)
+      throw new Error(`EnsureExistence check failed for model ${this.formatIdentifier(identifier)}`);
+    return instance;
+  }
+
+  public ensureExistenceOptional(identifier: Identifier | null) {
+    if (identifier === null)
+      return null;
+    return this.ensureExistence(identifier);
   }
 }
