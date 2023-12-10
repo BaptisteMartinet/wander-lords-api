@@ -23,9 +23,10 @@ function genAssociationWhere(
 
 function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
-  const { model: targetModel } = associationDef;
+  const { model: targetModel, description } = associationDef;
   return {
     type: targetModel.type,
+    description,
     resolve(source) {
       const where = genAssociationWhere({ source, sequelizeAssociation });
       return targetModel.model.findOne({ where });
@@ -35,9 +36,10 @@ function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any
 
 function genHasOne(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
-  const { model: targetModel } = associationDef;
+  const { model: targetModel, description } = associationDef;
   return {
     type: targetModel.type,
+    description,
     resolve(source) {
       const where = genAssociationWhere({ source, sequelizeAssociation });
       return targetModel.model.findOne({ where });
@@ -47,9 +49,10 @@ function genHasOne(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, u
 
 function genHasMany(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
-  const { model: targetModel } = associationDef;
+  const { model: targetModel, description } = associationDef;
   return {
     type: new GraphQLNonNullList(targetModel.type),
+    description,
     resolve(source) {
       const where = genAssociationWhere({ source, sequelizeAssociation });
       return targetModel.model.findAll({ where });

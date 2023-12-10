@@ -38,6 +38,7 @@ export interface AssociationDefinition {
   foreignKey?: string,
   sourceKey?: string,
   deleteCascade?: boolean,
+  description?: string,
 }
 
 export type AssocationSpecs = {
