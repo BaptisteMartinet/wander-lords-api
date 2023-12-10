@@ -67,10 +67,10 @@ export function genModelAssociationsFields(associations: Map<string, AssocationS
   const exposedAssociationsObj = makeRecordFromEntries(exposedAssociations);
   return mapRecord(exposedAssociationsObj, (associationSpecs) => {
     const { associationDef } = associationSpecs;
-    switch(associationDef.type) {
+    switch (associationDef.type) {
       case 'belongsTo': return genBelongsTo(associationSpecs);
       case 'hasOne': return genHasOne(associationSpecs);
-      case 'hasMany' : return genHasMany(associationSpecs);
+      case 'hasMany': return genHasMany(associationSpecs);
     }
   });
 }

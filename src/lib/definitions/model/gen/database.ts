@@ -3,7 +3,7 @@ import type { ModelDefinition, FieldDefinition } from '@lib/definitions';
 
 import { mapRecord } from '@lib/utils/object';
 
-export function makeModelAttributes(fields: Record<string, FieldDefinition>){
+export function makeModelAttributes(fields: Record<string, FieldDefinition>) {
   const attributes = mapRecord(fields, (field) => {
     const { type, allowNull, defaultValue } = field;
     return {
