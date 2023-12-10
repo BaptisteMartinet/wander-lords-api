@@ -28,6 +28,7 @@ const Author: Model<AuthorModel> = new Model({
       type: 'hasMany',
       foreignKey: 'authorId',
       exposed: true,
+      description: 'A test desc',
     },
   }),
   timestamps: true,
