@@ -20,3 +20,10 @@ export function filterRecord<K extends string, V>(obj: Record<K, V>, fn: (value:
   }
   return newObj;
 }
+
+export function makeRecordFromEntries<K extends string, V>(entries: Iterable<[ K, V ]>): Record<K, V> {
+  return Array.from(entries).reduce((acc, [key, val]) => {
+    acc[key] = val;
+    return acc;
+  }, {} as Record<K, V>);
+}
