@@ -24,31 +24,29 @@ export default class Model<M extends SequelizeModel> {
     return this.definition.name;
   }
 
+  private genAssociation(associationName: string, association: AssociationDefinition) {
+    const { model: targetModel, type, foreignKey, sourceKey, deleteCascade } = association;
+    const onDelete = (deleteCascade === true ? 'CASCADE' : 'SET NULL');
+    switch(type) {
+      case 'belongsTo': return this._model.belongsTo(targetModel.model, { as: associationName, foreignKey, targetKey: sourceKey, onDelete });
+      case 'hasOne': return this._model.hasOne(targetModel.model, { as: associationName, foreignKey, sourceKey, onDelete });
+      case 'hasMany': return this._model.hasMany(targetModel.model, { as: associationName, foreignKey, sourceKey, onDelete });
+      default: throw new Error(`Invalid association type: ${type}`);
+    }
+  }
+
   get associations() {
     if (this._associations !== null)
       return this._associations;
     this._associations = new Map();
-    const associationDefinitions = unthunk(this._definition.associations);
-    if (associationDefinitions === undefined)
+    const associationsDefs = unthunk(this._definition.associations);
+    if (associationsDefs === undefined)
       return this._associations;
-    for (const [name, association] of Object.entries(associationDefinitions)) {
-      if (this._associations.has(name))
-        throw new Error(`Model#${this.name} has duplicated association name ${name}`);
-      const { model: targetModel, type, foreignKey, sourceKey, deleteCascade } = association;
-      const onDelete = (deleteCascade === true ? 'CASCADE' : 'SET NULL');
-      switch(type) {
-        case 'belongsTo':
-          this._associations.set(name, [this._model.belongsTo(targetModel.model, { as: name, foreignKey, targetKey: sourceKey, onDelete }), association]);
-          break;
-        case 'hasOne':
-          this._associations.set(name, [this._model.hasOne(targetModel.model, { as: name, foreignKey, sourceKey, onDelete }), association]);
-          break;
-        case 'hasMany':
-          this._associations.set(name, [this._model.hasMany(targetModel.model, { as: name, foreignKey, sourceKey, onDelete }), association]);
-          break;
-        default:
-          throw new Error(`Invalid association type: ${type}`);
-      }
+    for (const [associationName, associationDef] of Object.entries(associationsDefs)) {
+      if (this._associations.has(associationName))
+        throw new Error(`Model#${this.name} has duplicated association name ${associationName}`);
+      const sequelizeAssociation = this.genAssociation(associationName, associationDef);
+      this._associations.set(associationName, [sequelizeAssociation, associationDef]);
     }
     return this._associations;
   }
