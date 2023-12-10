@@ -1,9 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Model as SequelizeModel, Association, WhereOptions } from 'sequelize';
 import type { GraphQLFieldConfig, GraphQLFieldConfigMap } from 'graphql';
 import type { AssocationSpecs } from '@lib/definitions';
 
 import { GraphQLNonNullList } from '@lib/graphql';
 import { makeRecordFromEntries, mapRecord } from '@lib/utils/object';
+
+function genAssociationWhere(
+  args: {
+    source: SequelizeModel,
+    sequelizeAssociation: Association,
+  }
+): WhereOptions {
+  const { source, sequelizeAssociation } = args;
+  const { foreignKey, isMultiAssociation } = sequelizeAssociation;
+  // TODO The Association type does not include targetKey/sourceKey
+  const sourceKey: string = (sequelizeAssociation as any).targetKey ?? (sequelizeAssociation as any).sourceKey;
+  if (isMultiAssociation)
+    return { [foreignKey]: source.dataValues[sourceKey] };
+  return { [sourceKey]: source.dataValues[foreignKey] };
+}
 
 function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
@@ -11,10 +27,8 @@ function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any
   return {
     type: targetModel.type,
     resolve(source) {
-      const targetModelPk = source[sequelizeAssociation.foreignKey];
-      if (targetModelPk === null || targetModelPk === undefined)
-        return null;
-      return targetModel.model.findByPk(targetModelPk);
+      const where = genAssociationWhere({ source, sequelizeAssociation });
+      return targetModel.model.findOne({ where });
     },
   };
 }
@@ -25,10 +39,8 @@ function genHasOne(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, u
   return {
     type: targetModel.type,
     resolve(source) {
-      const targetModelPk = source[sequelizeAssociation.foreignKey];
-      if (targetModelPk === null || targetModelPk === undefined)
-        return null;
-      return targetModel.model.findByPk(targetModelPk);
+      const where = genAssociationWhere({ source, sequelizeAssociation });
+      return targetModel.model.findOne({ where });
     }
   };
 }
@@ -39,8 +51,7 @@ function genHasMany(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, 
   return {
     type: new GraphQLNonNullList(targetModel.type),
     resolve(source) {
-      const where: Record<string, unknown> = {};
-      where[sequelizeAssociation.foreignKey] = source.id;
+      const where = genAssociationWhere({ source, sequelizeAssociation });
       return targetModel.model.findAll({ where });
     },
   };
