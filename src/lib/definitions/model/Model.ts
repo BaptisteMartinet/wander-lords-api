@@ -24,8 +24,8 @@ export default class Model<M extends SequelizeModel> {
     return this.definition.name;
   }
 
-  private genAssociation(associationName: string, association: AssociationDefinition) {
-    const { model: targetModel, type, foreignKey, sourceKey, deleteCascade } = association;
+  private genAssociation(associationName: string, associationDef: AssociationDefinition) {
+    const { model: targetModel, type, foreignKey, sourceKey, deleteCascade } = associationDef;
     const onDelete = (deleteCascade === true ? 'CASCADE' : 'SET NULL');
     switch(type) {
       case 'belongsTo': return this._model.belongsTo(targetModel.model, { as: associationName, foreignKey, targetKey: sourceKey, onDelete });
