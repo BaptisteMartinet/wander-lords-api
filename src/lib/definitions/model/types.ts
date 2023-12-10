@@ -6,6 +6,7 @@ import type {
   Model as SequelizeModel,
   DataType,
   ModelIndexesOptions,
+  Association,
 } from 'sequelize';
 import type {
   GraphQLFieldConfig,
@@ -38,6 +39,11 @@ export interface AssociationDefinition {
   sourceKey?: string,
   deleteCascade?: boolean,
 }
+
+export type AssocationSpecs = {
+  sequelizeAssociation: Association,
+  associationDef: AssociationDefinition,
+};
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
   name: string,

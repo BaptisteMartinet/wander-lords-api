@@ -1,5 +1,5 @@
-import type { Model as SequelizeModel, Association, Identifier } from 'sequelize';
-import type { ModelDefinition, AssociationDefinition } from './types.js';
+import type { Model as SequelizeModel, Identifier } from 'sequelize';
+import type { ModelDefinition, AssociationDefinition, AssocationSpecs } from './types.js';
 
 import { GraphQLObjectType } from 'graphql';
 import { unthunk } from '@lib/utils/thunk.js';
@@ -9,7 +9,7 @@ export default class Model<M extends SequelizeModel> {
   private _definition;
   private _model;
   private _type: GraphQLObjectType | null = null;
-  private _associations: Map<string, { sequelizeAssociation: Association, associationDef: AssociationDefinition }> | null = null;
+  private _associations: Map<string, AssocationSpecs> | null = null;
 
   constructor(definition: ModelDefinition<M>) {
     this._definition = definition;

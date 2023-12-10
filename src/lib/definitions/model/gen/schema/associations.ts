@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Association } from 'sequelize';
 import type { GraphQLFieldConfig, GraphQLFieldConfigMap } from 'graphql';
-import type { AssociationDefinition } from '@lib/definitions';
+import type { AssocationSpecs } from '@lib/definitions';
 
 import { GraphQLNonNullList } from '@lib/graphql';
 
-function genBelongsTo(args: { sequelizeAssociation: Association, associationDef: AssociationDefinition }): GraphQLFieldConfig<any, unknown> {
-  const { sequelizeAssociation, associationDef } = args;
+function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
+  const { sequelizeAssociation, associationDef } = associationSpecs;
   const { model: targetModel } = associationDef;
   return {
     type: targetModel.type,
@@ -19,8 +18,8 @@ function genBelongsTo(args: { sequelizeAssociation: Association, associationDef:
   };
 }
 
-function genHasOne(args: { sequelizeAssociation: Association, associationDef: AssociationDefinition }): GraphQLFieldConfig<any, unknown> {
-  const { sequelizeAssociation, associationDef } = args;
+function genHasOne(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
+  const { sequelizeAssociation, associationDef } = associationSpecs;
   const { model: targetModel } = associationDef;
   return {
     type: targetModel.type,
@@ -33,8 +32,8 @@ function genHasOne(args: { sequelizeAssociation: Association, associationDef: As
   };
 }
 
-function genHasMany(args: { sequelizeAssociation: Association, associationDef: AssociationDefinition }): GraphQLFieldConfig<any, unknown> {
-  const { sequelizeAssociation, associationDef } = args;
+function genHasMany(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
+  const { sequelizeAssociation, associationDef } = associationSpecs;
   const { model: targetModel } = associationDef;
   return {
     type: new GraphQLNonNullList(targetModel.type),
@@ -46,7 +45,7 @@ function genHasMany(args: { sequelizeAssociation: Association, associationDef: A
   };
 }
 
-export function genModelAssociationsFields(associations: Map<string, { sequelizeAssociation: Association, associationDef: AssociationDefinition }>) {
+export function genModelAssociationsFields(associations: Map<string, AssocationSpecs>) {
   if (associations.size <= 0)
     return {};
   const ret: GraphQLFieldConfigMap<any, unknown> = {};
