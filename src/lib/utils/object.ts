@@ -2,11 +2,11 @@ export function mapRecord<
   KeyType extends string,
   ValueType,
   OutputType,
->(obj: Record<KeyType, ValueType>, fn: (value: ValueType) => OutputType) {
+>(obj: Record<KeyType, ValueType>, fn: (value: ValueType, key: KeyType) => OutputType) {
   const newObj = {} as Record<KeyType, OutputType>;
   for (const key in obj) {
     const value = obj[key];
-    newObj[key] = fn(value);
+    newObj[key] = fn(value, key);
   }
   return newObj;
 }
