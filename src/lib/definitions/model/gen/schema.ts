@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Model as SequelizeModel, Association } from 'sequelize';
-import type { GraphQLFieldConfigMap } from 'graphql';
+import type { GraphQLFieldConfig, GraphQLFieldConfigMap } from 'graphql';
 import type Model from '@lib/definitions';
 import type { FieldDefinition, AssociationDefinition } from '@lib/definitions';
 
@@ -46,47 +46,64 @@ export function genModelBaseFields(
   };
 }
 
+export function genBelongsTo(args: { sequelizeAssociation: Association, associationDef: AssociationDefinition }): GraphQLFieldConfig<any, unknown> {
+  const { sequelizeAssociation, associationDef } = args;
+  const { model: targetModel } = associationDef;
+  return {
+    type: targetModel.type,
+    resolve(source) {
+      const targetModelPk = source[sequelizeAssociation.foreignKey];
+      if (targetModelPk === null || targetModelPk === undefined)
+        return null;
+      return targetModel.model.findByPk(targetModelPk);
+    },
+  };
+}
+
+export function genHasOne(args: { sequelizeAssociation: Association, associationDef: AssociationDefinition }): GraphQLFieldConfig<any, unknown> {
+  const { sequelizeAssociation, associationDef } = args;
+  const { model: targetModel } = associationDef;
+  return {
+    type: targetModel.type,
+    resolve(source) {
+      const targetModelPk = source[sequelizeAssociation.foreignKey];
+      if (targetModelPk === null || targetModelPk === undefined)
+        return null;
+      return targetModel.model.findByPk(targetModelPk);
+    }
+  };
+}
+
+export function genHasMany(args: { sequelizeAssociation: Association, associationDef: AssociationDefinition }): GraphQLFieldConfig<any, unknown> {
+  const { sequelizeAssociation, associationDef } = args;
+  const { model: targetModel } = associationDef;
+  return {
+    type: new GraphQLNonNullList(targetModel.type),
+    resolve(source) {
+      const where: Record<string, unknown> = {};
+      where[sequelizeAssociation.foreignKey] = source.id;
+      return targetModel.model.findAll({ where });
+    },
+  };
+}
+
 export function genModelAssociationsFields(associations: Map<string, { sequelizeAssociation: Association, associationDef: AssociationDefinition }>) {
   if (associations.size <= 0)
     return {};
   const ret: GraphQLFieldConfigMap<any, unknown> = {};
-  for (const [name, association_] of associations) {
-    const { sequelizeAssociation, associationDef } = association_;
-    const { exposed, type, model: targetModel } = associationDef;
+  for (const [associationName, associationSpecs] of associations) {
+    const { exposed, type } = associationSpecs.associationDef;
     if (!exposed)
       continue;
     switch(type) {
       case 'belongsTo':
-        ret[name] = {
-          type: targetModel.type,
-          resolve(source) {
-            const targetModelPk = source[sequelizeAssociation.foreignKey];
-            if (targetModelPk === null || targetModelPk === undefined)
-              return null;
-            return targetModel.model.findByPk(targetModelPk);
-          },
-        };
+        ret[associationName] = genBelongsTo(associationSpecs);
         break;
       case 'hasOne':
-        ret[name] = {
-          type: targetModel.type,
-          resolve(source) {
-            const targetModelPk = source[sequelizeAssociation.foreignKey];
-            if (targetModelPk === null || targetModelPk === undefined)
-              return null;
-            return targetModel.model.findByPk(targetModelPk);
-          }
-        };
+        ret[associationName] = genHasOne(associationSpecs);
         break;
       case 'hasMany':
-        ret[name] = {
-          type: new GraphQLNonNullList(targetModel.type),
-          resolve(source) {
-            const where: Record<string, unknown> = {};
-            where[sequelizeAssociation.foreignKey] = source.id;
-            return targetModel.model.findAll({ where });
-          },
-        };
+        ret[associationName] = genHasMany(associationSpecs);
         break;
       default: throw new Error(`Unsupported association type: ${type}`);
     }
