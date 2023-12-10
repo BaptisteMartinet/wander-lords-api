@@ -3,6 +3,7 @@ import type { GraphQLFieldConfig, GraphQLFieldConfigMap } from 'graphql';
 import type { AssocationSpecs } from '@lib/definitions';
 
 import { GraphQLNonNullList } from '@lib/graphql';
+import { makeRecordFromEntries, mapRecord } from '@lib/utils/object';
 
 function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
@@ -45,26 +46,17 @@ function genHasMany(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, 
   };
 }
 
-export function genModelAssociationsFields(associations: Map<string, AssocationSpecs>) {
+export function genModelAssociationsFields(associations: Map<string, AssocationSpecs>): GraphQLFieldConfigMap<unknown, unknown> {
   if (associations.size <= 0)
     return {};
-  const ret: GraphQLFieldConfigMap<any, unknown> = {};
-  for (const [associationName, associationSpecs] of associations) {
-    const { exposed, type } = associationSpecs.associationDef;
-    if (!exposed)
-      continue;
-    switch(type) {
-      case 'belongsTo':
-        ret[associationName] = genBelongsTo(associationSpecs);
-        break;
-      case 'hasOne':
-        ret[associationName] = genHasOne(associationSpecs);
-        break;
-      case 'hasMany':
-        ret[associationName] = genHasMany(associationSpecs);
-        break;
-      default: throw new Error(`Unsupported association type: ${type}`);
+  const exposedAssociations = Array.from(associations).filter(([, { associationDef }]) => associationDef.exposed);
+  const exposedAssociationsObj = makeRecordFromEntries(exposedAssociations);
+  return mapRecord(exposedAssociationsObj, (associationSpecs) => {
+    const { associationDef } = associationSpecs;
+    switch(associationDef.type) {
+      case 'belongsTo': return genBelongsTo(associationSpecs);
+      case 'hasOne': return genHasOne(associationSpecs);
+      case 'hasMany' : return genHasMany(associationSpecs);
     }
-  }
-  return ret;
+  });
 }
