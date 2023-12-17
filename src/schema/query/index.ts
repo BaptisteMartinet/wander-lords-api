@@ -1,5 +1,6 @@
 import { GraphQLObjectType } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
+import { exposeModel } from '@lib/schema';
 import { Author, Book } from '@definitions/models';
 
 export default new GraphQLObjectType({
@@ -11,11 +12,10 @@ export default new GraphQLObjectType({
         return Author.model.findAll();
       }
     },
-    books: {
-      type: new GraphQLNonNullList(Book.type),
-      resolve() {
-        return Book.model.findAll();
-      },
-    },
+
+    ...exposeModel(Book, {
+      one: 'book',
+      list: 'books',
+    }),
   },
 });
