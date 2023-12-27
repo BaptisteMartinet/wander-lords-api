@@ -67,6 +67,10 @@ export default class Model<M extends SequelizeModel> {
     return this._model;
   }
 
+  /**
+   * @param identifier
+   * @returns A string formatted like so [ModelName]#[identifier] (e.g. "User#1234")
+   */
   public formatIdentifier(identifier: Identifier) {
     return this.name + '#' + identifier;
   }
