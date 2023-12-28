@@ -9,7 +9,7 @@ export default new GraphQLObjectType({
       args: {
         input: {
           type: new GraphQLNonNull(new GraphQLInputObjectType({
-          name: 'CreateBookInput',
+            name: 'CreateBookInput',
             fields: {
               authorId: { type: new GraphQLNonNull(GraphQLInt) },
               title: { type: new GraphQLNonNull(GraphQLString) },
@@ -42,7 +42,7 @@ export default new GraphQLObjectType({
         return book.update(patch);
       },
     },
-    
+
     delete: {
       type: new GraphQLNonNull(GraphQLBoolean),
       args: {
