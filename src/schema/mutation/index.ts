@@ -1,6 +1,6 @@
 import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
-import AuthorMutation from './Author';
-import BookMutation from './Book';
+import AuthorMutation from './Author.mutation';
+import BookMutation from './Book.mutation';
 
 export default new GraphQLObjectType({
   name: 'Mutation',
