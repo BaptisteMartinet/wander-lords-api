@@ -1,4 +1,4 @@
-import { GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { Author, Book } from '@definitions/models';
 import { RoleEnum } from '@definitions/enums';
 
@@ -26,6 +26,19 @@ export default new GraphQLObjectType({
       resolve(_, args) {
         const { authorId, title } = args;
         return Book.model.create({ title, authorId });
+      },
+    },
+
+    deleteBook: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      async resolve(_, args) {
+        const { id } = args;
+        await Book.ensureExistence(id);
+        await Book.model.destroy({ where: { id } });
+        return true;
       },
     },
   },
