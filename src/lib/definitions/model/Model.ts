@@ -1,5 +1,5 @@
 import type { Model as SequelizeModel, Identifier } from 'sequelize';
-import type { ModelDefinition, AssociationDefinition, AssocationSpecs } from './types.js';
+import type { ModelDefinition, AssociationDefinition, AssocationSpecs, Context } from './types.js';
 
 import { GraphQLObjectType } from 'graphql';
 import { unthunk } from '@lib/utils/thunk.js';
@@ -75,16 +75,27 @@ export default class Model<M extends SequelizeModel> {
     return this.name + '#' + identifier;
   }
 
-  public async ensureExistence(identifier: Identifier) {
-    const instance = await this.model.findByPk(identifier);
+  /**
+   * Equivalent to `model.findByPk()` but uses loaders for caching and batching if ctx is provided.
+   */
+  public findByPkAllAttrs(identifier: Identifier, opts: { ctx?: Context } = {}) {
+    const { ctx } = opts;
+    if (ctx === undefined)
+      return this.model.findByPk(identifier);
+    const loader = ctx.loader.getModelLoader(this);
+    return loader.load(identifier).catch(() => null);
+  }
+
+  public async ensureExistence(identifier: Identifier, opts: { ctx?: Context } = {}) {
+    const instance = await this.findByPkAllAttrs(identifier, opts);
     if (instance === null)
       throw new Error(`EnsureExistence check failed for model ${this.formatIdentifier(identifier)}`);
     return instance;
   }
 
-  public ensureExistenceOptional(identifier: Identifier | null) {
+  public ensureExistenceOptional(identifier: Identifier | null, opts: { ctx?: Context } = {}) {
     if (identifier === null)
       return null;
-    return this.ensureExistence(identifier);
+    return this.ensureExistence(identifier, opts);
   }
 }
