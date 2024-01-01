@@ -1,8 +1,10 @@
+import type { Context } from '@lib/definitions';
+
 import { GraphQLBoolean, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { Author } from '@definitions/models';
 import { RoleEnum } from '@definitions/enums';
 
-export default new GraphQLObjectType({
+export default new GraphQLObjectType<unknown, Context>({
   name: 'AuthorMutation',
   fields: {
     create: {
@@ -29,9 +31,9 @@ export default new GraphQLObjectType({
       args: {
         id: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      async resolve(_, args) {
+      async resolve(_, args, ctx) {
         const { id } = args;
-        const author = await Author.ensureExistence(id);
+        const author = await Author.ensureExistence(id, { ctx });
         await author.destroy();
         return true;
       },
