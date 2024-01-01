@@ -1,3 +1,5 @@
+import type { Context } from '@lib/definitions';
+
 import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
@@ -6,6 +8,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import ModelLoader from '@lib/definitions/model/ModelLoader';
 import sequelize from './core/sequelize';
 import schema from './schema';
 
@@ -25,7 +28,7 @@ async function main() {
   });
 
   const serverCleanup = useServer({ schema }, wsServer);
-  const server = new ApolloServer({
+  const server = new ApolloServer<Context>({
     schema,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -42,7 +45,11 @@ async function main() {
   });
 
   await server.start();
-  app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
+  app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server, {
+    context: async () => ({
+      loader: new ModelLoader(),
+    }),
+  }));
 
   const PORT = 4000;
   httpServer.listen(PORT, () => {
