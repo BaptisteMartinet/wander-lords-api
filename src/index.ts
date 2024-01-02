@@ -1,5 +1,3 @@
-import type { Context } from '@lib/definitions';
-
 import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
@@ -8,7 +6,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import ModelLoader from '@lib/definitions/model/ModelLoader';
+import { makeContext, type Context } from '@lib/schema';
 import sequelize from './core/sequelize';
 import schema from './schema';
 
@@ -46,9 +44,7 @@ async function main() {
 
   await server.start();
   app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server, {
-    context: async () => ({
-      loader: new ModelLoader(),
-    }),
+    context: async () => makeContext(),
   }));
 
   const PORT = 4000;

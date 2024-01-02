@@ -1,4 +1,4 @@
-import type { Context } from '@lib/definitions';
+import type { Context } from '@lib/schema';
 
 import { GraphQLBoolean, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { Author } from '@definitions/models';
