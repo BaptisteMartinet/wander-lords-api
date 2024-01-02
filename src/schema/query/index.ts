@@ -15,6 +15,7 @@ export default new GraphQLObjectType({
 
     ...exposeModel(Book, {
       findByPk: 'book',
+      findByPks: 'booksByPks',
       list: 'books',
     }),
   },
