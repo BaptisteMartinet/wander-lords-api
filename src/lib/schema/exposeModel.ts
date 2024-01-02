@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GraphQLFieldConfig } from 'graphql';
 import type Model from '@lib/definitions';
+import type { Context } from '@lib/schema';
 
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
@@ -30,7 +31,7 @@ export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
       return config;
     config[exposition] = genExposition(model, exposeField);
     return config;
-  }, {} as Record<string, GraphQLFieldConfig<unknown, unknown>>);
+  }, {} as Record<string, GraphQLFieldConfig<unknown, Context>>);
 }
 
 function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
@@ -42,20 +43,20 @@ function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
   throw new Error(`Unsupported expose field: ${exposeField}`);
 }
 
-function genFindByPk(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
+function genFindByPk(model: Model<any>): GraphQLFieldConfig<unknown, Context> {
   return {
     type: new GraphQLNonNull(model.type),
     args: {
       id: { type: new GraphQLNonNull(GraphQLInt) },
     },
-    resolve(source, args) {
+    resolve(source, args, ctx) {
       const { id } = args;
-      return model.ensureExistence(id);
+      return model.ensureExistence(id, { ctx });
     },
   };
 }
 
-function genList(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
+function genList(model: Model<any>): GraphQLFieldConfig<unknown, Context> {
   return {
     type: new GraphQLNonNullList(model.type),
     resolve() {
