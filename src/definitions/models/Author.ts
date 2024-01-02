@@ -1,7 +1,7 @@
 import type { CreationOptional } from 'sequelize';
 import type { InferModel } from '@lib/sequelize';
 
-import Model, { STRING } from '@lib/definitions';
+import { Model, STRING } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
 import { Book } from '@definitions/models';
 import { RoleEnum, Role } from '@definitions/enums';

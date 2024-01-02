@@ -1,6 +1,6 @@
 import type { Model as SequelizeModel } from 'sequelize';
 import type { GraphQLFieldConfigMap } from 'graphql';
-import type Model from '@lib/definitions';
+import type { Model } from '@lib/definitions';
 import type { FieldDefinition } from '@lib/definitions';
 
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';

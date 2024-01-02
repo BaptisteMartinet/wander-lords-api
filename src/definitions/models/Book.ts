@@ -1,7 +1,7 @@
 import type { CreationOptional, ForeignKey } from 'sequelize';
 import type { InferModel } from '@lib/sequelize';
 
-import Model, { STRING, INTEGER } from '@lib/definitions';
+import { Model, STRING, INTEGER } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
 import { Author } from '@definitions/models';
 

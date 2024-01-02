@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GraphQLFieldConfig } from 'graphql';
 import type { Identifier } from 'sequelize';
-import type Model from '@lib/definitions';
+import type { Model } from '@lib/definitions';
 import type { Context } from '@lib/schema';
 
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
