@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GraphQLFieldConfig } from 'graphql';
+import type { Identifier } from 'sequelize';
 import type Model from '@lib/definitions';
 import type { Context } from '@lib/schema';
 
@@ -14,14 +15,14 @@ export type ExposeField = string | false;
 
 export interface ExposeOpts {
   /**
-   * Expose a field to get the provided Model by primary key.
+   * Expose a field to get the provided Model by id.
    * {@link ExposeField}
    */
-  findByPk: ExposeField;
+  findById: ExposeField;
   /**
-   * Expose a field to get the provided Model by primary keys.
+   * Expose a field to get the provided Model by ids.
    */
-  findByPks: ExposeField;
+  findByIds: ExposeField;
   /**
    * Expose a field to get a list of the provided Model.
    * {@link ExposeField}
@@ -40,15 +41,15 @@ export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
 
 function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
   switch (exposeField) {
-    case 'findByPk': return genFindByPk(model);
-    case 'findByPks': return genFindByPks(model);
+    case 'findById': return genFindById(model);
+    case 'findByIds': return genFindByIds(model);
     case 'list': return genList(model);
     default: break;
   }
   throw new Error(`Unsupported expose field: ${exposeField}`);
 }
 
-function genFindByPk(model: Model<any>): GraphQLFieldConfig<unknown, Context> {
+function genFindById(model: Model<any>): GraphQLFieldConfig<unknown, Context, { id: Identifier }> {
   return {
     type: new GraphQLNonNull(model.type),
     args: {
@@ -61,7 +62,7 @@ function genFindByPk(model: Model<any>): GraphQLFieldConfig<unknown, Context> {
   };
 }
 
-function genFindByPks(model: Model<any>): GraphQLFieldConfig<unknown, Context, { ids: Array<number> }> {
+function genFindByIds(model: Model<any>): GraphQLFieldConfig<unknown, Context, { ids: Array<Identifier> }> {
   return {
     type: new GraphQLNonNull(new GraphQLNonNullList(model.type)),
     args: {
