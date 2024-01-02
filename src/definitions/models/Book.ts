@@ -1,16 +1,11 @@
-import {
-  Model as SequelizeModel,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
-  ForeignKey,
-} from 'sequelize';
+import type { CreationOptional, ForeignKey } from 'sequelize';
+import type { InferModel } from '@lib/sequelize';
 
 import Model, { STRING, INTEGER } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
 import { Author } from '@definitions/models';
 
-export interface BookModel extends SequelizeModel<InferAttributes<BookModel>, InferCreationAttributes<BookModel>> {
+export interface BookModel extends InferModel<BookModel> {
   id: CreationOptional<number>;
   authorId: ForeignKey<number>;
   title: string;
