@@ -14,7 +14,6 @@ import type {
   GraphQLScalarType,
 } from 'graphql';
 import type Model from './Model';
-import type ModelLoader from './ModelLoader';
 
 export interface FieldType {
   identifier: string,
@@ -58,8 +57,4 @@ export interface ModelDefinition<ModelType extends SequelizeModel> {
   tableName?: string,
   indexes?: readonly ModelIndexesOptions[],
   paranoid?: boolean,
-}
-
-export interface Context {
-  loader: ModelLoader,
 }

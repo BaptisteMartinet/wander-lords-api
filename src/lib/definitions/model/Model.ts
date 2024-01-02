@@ -1,5 +1,6 @@
 import type { Model as SequelizeModel, Identifier } from 'sequelize';
-import type { ModelDefinition, AssociationDefinition, AssocationSpecs, Context } from './types.js';
+import type { Context } from '@lib/schema';
+import type { ModelDefinition, AssociationDefinition, AssocationSpecs } from './types.js';
 
 import { GraphQLObjectType } from 'graphql';
 import { unthunk } from '@lib/utils/thunk.js';
