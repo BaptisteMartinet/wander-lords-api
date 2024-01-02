@@ -33,7 +33,7 @@ export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
   }, {} as Record<string, GraphQLFieldConfig<unknown, unknown>>);
 }
 
-export function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
+function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
   switch (exposeField) {
     case 'one': return genOne(model);
     case 'list': return genList(model);
@@ -42,7 +42,7 @@ export function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) 
   throw new Error(`Unsupported expose field: ${exposeField}`);
 }
 
-export function genOne(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
+function genOne(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
   return {
     type: new GraphQLNonNull(model.type),
     args: {
@@ -55,7 +55,7 @@ export function genOne(model: Model<any>): GraphQLFieldConfig<unknown, unknown> 
   };
 }
 
-export function genList(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
+function genList(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
   return {
     type: new GraphQLNonNullList(model.type),
     resolve() {
