@@ -16,7 +16,7 @@ export interface ExposeOpts {
    * Expose a field to get the provided Model by id.
    * {@link ExposeField}
    */
-  one: ExposeField;
+  findByPk: ExposeField;
   /**
    * Expose a field to get a list of the provided Model.
    * {@link ExposeField}
@@ -35,14 +35,14 @@ export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
 
 function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
   switch (exposeField) {
-    case 'one': return genOne(model);
+    case 'findByPk': return genFindByPk(model);
     case 'list': return genList(model);
     default: break;
   }
   throw new Error(`Unsupported expose field: ${exposeField}`);
 }
 
-function genOne(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
+function genFindByPk(model: Model<any>): GraphQLFieldConfig<unknown, unknown> {
   return {
     type: new GraphQLNonNull(model.type),
     args: {
