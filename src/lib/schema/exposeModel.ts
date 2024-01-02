@@ -14,10 +14,14 @@ export type ExposeField = string | false;
 
 export interface ExposeOpts {
   /**
-   * Expose a field to get the provided Model by id.
+   * Expose a field to get the provided Model by primary key.
    * {@link ExposeField}
    */
   findByPk: ExposeField;
+  /**
+   * Expose a field to get the provided Model by primary keys.
+   */
+  findByPks: ExposeField;
   /**
    * Expose a field to get a list of the provided Model.
    * {@link ExposeField}
@@ -37,6 +41,7 @@ export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
 function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
   switch (exposeField) {
     case 'findByPk': return genFindByPk(model);
+    case 'findByPks': return genFindByPks(model);
     case 'list': return genList(model);
     default: break;
   }
@@ -52,6 +57,19 @@ function genFindByPk(model: Model<any>): GraphQLFieldConfig<unknown, Context> {
     resolve(source, args, ctx) {
       const { id } = args;
       return model.ensureExistence(id, { ctx });
+    },
+  };
+}
+
+function genFindByPks(model: Model<any>): GraphQLFieldConfig<unknown, Context, { ids: Array<number> }> {
+  return {
+    type: new GraphQLNonNull(new GraphQLNonNullList(model.type)),
+    args: {
+      ids: { type: new GraphQLNonNull(new GraphQLNonNullList(GraphQLInt)) },
+    },
+    resolve(source, args, ctx) {
+      const { ids } = args;
+      return Promise.all(ids.map(id => model.ensureExistence(id, { ctx })));
     },
   };
 }
