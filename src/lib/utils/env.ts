@@ -4,21 +4,21 @@ export class InvalidEnvVariableType extends Error {
   }
 }
 
-export function MandatoryString(variable: string) {
-  const value = process.env[variable];
-  if (value === undefined)
-    throw new Error(`Missing env variable "${variable}"`);
-  return value;
-}
-
 export function OptionalString(variable: string) {
   const value = process.env[variable];
   return value ?? null;
 }
 
+export function MandatoryString(variable: string) {
+  const value = OptionalString(variable);
+  if (value === null)
+    throw new Error(`Missing env variable "${variable}"`);
+  return value;
+}
+
 export function OptionalNumber(variable: string) {
-  const value_ = process.env[variable];
-  if (value_ === undefined)
+  const value_ = OptionalString(variable);
+  if (value_ === null)
     return null;
   const value = Number(value_);
   if (isNaN(value))
@@ -26,25 +26,25 @@ export function OptionalNumber(variable: string) {
   return value;
 }
 
+export function MandatoryNumber(variable: string) {
+  const value = OptionalNumber(variable);
+  if (value === null)
+    throw new InvalidEnvVariableType(variable, 'Number');
+  return value;
+}
+
 export function OptionalBool(variable: string) {
-  const value = process.env[variable];
-  if (value === undefined)
+  const value = OptionalString(variable);
+  if (value === null)
     return null;
   if (value !== 'true' && value !== 'false')
     throw new InvalidEnvVariableType(variable, 'Boolean');
   return value === 'true';
 }
 
-export function MandatoryNumber(variable: string) {
-  const value = Number(MandatoryString(variable));
-  if (isNaN(value))
-    throw new InvalidEnvVariableType(variable, 'Number');
-  return value;
-}
-
 export function MandatoryBool(variable: string) {
-  const value = MandatoryString(variable);
-  if (value !== 'true' && value !== 'false')
+  const value = OptionalBool(variable);
+  if (value === null)
     throw new InvalidEnvVariableType(variable, 'Boolean');
-  return value === 'true';
+  return value;
 }
