@@ -24,7 +24,7 @@ export interface ExposeOpts {
   list: ExposeField;
 }
 
-export function exposeModel(model: Model<any>, opts: ExposeOpts) {
+export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
   return reduceRecord(opts, (config, exposition, exposeField) => {
     if (exposition === false)
       return config;
