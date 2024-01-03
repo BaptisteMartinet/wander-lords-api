@@ -1,4 +1,4 @@
-import type { Model as SequelizeModel, Identifier } from 'sequelize';
+import type { Model as SequelizeModel, Identifier, IncludeOptions } from 'sequelize';
 import type { Context } from '@lib/schema';
 import type { ModelDefinition, AssociationDefinition, AssocationSpecs } from './types.js';
 
@@ -50,6 +50,17 @@ export default class Model<M extends SequelizeModel> {
       this._associations.set(associationName, { sequelizeAssociation, associationDef });
     }
     return this._associations;
+  }
+
+  public includeAssociation(associationName: string, options: Omit<IncludeOptions, 'as' | 'model' | 'association'>): IncludeOptions {
+    const association = this.associations.get(associationName);
+    if (association === undefined)
+      throw new Error(`Tried to access unknown association: ${associationName}`);
+    const { sequelizeAssociation } = association;
+    return {
+      association: sequelizeAssociation,
+      ...options,
+    };
   }
 
   /**
