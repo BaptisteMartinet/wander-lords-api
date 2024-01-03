@@ -52,6 +52,17 @@ export default class Model<M extends SequelizeModel> {
     return this._associations;
   }
 
+  /**
+   * Used when performing eager loading.
+   * @example
+   * ```ts
+   * Author.model.findAll({
+   *  include: Author.includeAssociation('books', {
+   *   where: { title: 'Harry Potter and the Chamber of Secrets' },
+   *  }),
+   * });
+   * ```
+   */
   public includeAssociation(associationName: string, options?: Omit<IncludeOptions, 'as' | 'model' | 'association'>): IncludeOptions {
     const association = this.associations.get(associationName);
     if (association === undefined)
@@ -64,7 +75,7 @@ export default class Model<M extends SequelizeModel> {
   }
 
   /**
-   * @returns The Model's GraphQL type
+   * @returns The GraphQL type
    */
   get type() {
     if (!this._type)
@@ -73,7 +84,7 @@ export default class Model<M extends SequelizeModel> {
   }
 
   /**
-   * @returns The sequelize Model
+   * @returns The Sequelize model
    */
   get model() {
     return this._model;
@@ -88,7 +99,7 @@ export default class Model<M extends SequelizeModel> {
   }
 
   /**
-   * Equivalent to `model.findByPk()` but uses loaders for caching and batching if ctx is provided.
+   * Equivalent to `model.findByPk()` but uses loaders for caching and batching when ctx is provided.
    */
   public findByPkAllAttrs(identifier: Identifier, opts: { ctx?: Context } = {}) {
     const { ctx } = opts;
@@ -98,6 +109,9 @@ export default class Model<M extends SequelizeModel> {
     return loader.load(identifier).catch(() => null);
   }
 
+  /**
+   * Equivalent to {@link findByPkAllAttrs} but throws if the instance is not found.
+   */
   public async ensureExistence(identifier: Identifier, opts: { ctx?: Context } = {}) {
     const instance = await this.findByPkAllAttrs(identifier, opts);
     if (instance === null)
@@ -105,6 +119,9 @@ export default class Model<M extends SequelizeModel> {
     return instance;
   }
 
+  /**
+   * Equivalent to {@link ensureExistence} but returns null if the identifier is null.
+   */
   public ensureExistenceOptional(identifier: Identifier | null, opts: { ctx?: Context } = {}) {
     if (identifier === null)
       return null;
