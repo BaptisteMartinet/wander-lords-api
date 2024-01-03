@@ -52,7 +52,7 @@ export default class Model<M extends SequelizeModel> {
     return this._associations;
   }
 
-  public includeAssociation(associationName: string, options: Omit<IncludeOptions, 'as' | 'model' | 'association'>): IncludeOptions {
+  public includeAssociation(associationName: string, options?: Omit<IncludeOptions, 'as' | 'model' | 'association'>): IncludeOptions {
     const association = this.associations.get(associationName);
     if (association === undefined)
       throw new Error(`Tried to access unknown association: ${associationName}`);
