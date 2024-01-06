@@ -19,12 +19,11 @@ export default function genModelOffsetPagination<M extends SequelizeModel>(model
     },
     async resolve(_, args) {
       const { offset, limit } = args;
-      const nodes = await model.model.findAll({
+      const { rows: nodes, count } = await model.model.findAndCountAll({
         offset: offset ?? undefined,
         limit: limit ?? undefined,
       });
-      const totalCount = await model.model.count();
-      return { nodes, totalCount };
+      return { nodes, count };
     },
   };
 }
@@ -34,7 +33,7 @@ function makeOffsetConnection<M extends SequelizeModel>(model: Model<M>) {
     name: model.name + 'OffsetConnection',
     fields: {
       nodes: { type: new GraphQLNonNullList(model.type) },
-      totalCount: { type: new GraphQLNonNull(GraphQLInt) },
+      count: { type: new GraphQLNonNull(GraphQLInt) },
     },
   });
 }
