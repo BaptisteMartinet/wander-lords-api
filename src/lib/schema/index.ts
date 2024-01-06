@@ -8,4 +8,5 @@ export {
   type OrderType,
   type GenericOrderBy,
 } from './genModelOrderBy';
+export { default as cacheGraphQLType } from './cacheGraphQLType';
 export * from './context';
