@@ -5,7 +5,7 @@ const GraphQLTypesMap = new Map<string, GraphQLNamedType>();
 /**
  * @description Looks if provided type has already been created. Cache it otherwise.
  */
-export default function cacheGQLType<T extends GraphQLNamedType>(type: T) {
+export default function cacheGraphQLType<T extends GraphQLNamedType>(type: T) {
   const typeName = type.name;
   const cachedType = GraphQLTypesMap.get(typeName);
   if (cachedType !== undefined)
