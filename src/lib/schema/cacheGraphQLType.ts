@@ -3,7 +3,7 @@ import type { GraphQLNamedType } from 'graphql';
 const GraphQLTypesMap = new Map<string, GraphQLNamedType>();
 
 /**
- * @description Looks if provided type has already been created. Cache it otherwise.
+ * @description Checks if provided type has already been created. Cache it otherwise.
  */
 export default function cacheGraphQLType<T extends GraphQLNamedType>(type: T) {
   const typeName = type.name;
