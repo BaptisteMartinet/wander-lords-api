@@ -5,7 +5,7 @@ import type { Model } from '@lib/definitions';
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
 
-export interface OffsetPaginationArgs {
+interface OffsetPaginationArgs {
   offset?: number | null,
   limit?: number | null,
 }
