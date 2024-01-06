@@ -31,9 +31,9 @@ export default function genModelOffsetPagination<M extends SequelizeModel>(model
 function makeOffsetConnection<M extends SequelizeModel>(model: Model<M>) {
   return new GraphQLObjectType({
     name: model.name + 'OffsetConnection',
-    fields: {
+    fields: () => ({
       nodes: { type: new GraphQLNonNullList(model.type) },
       count: { type: new GraphQLNonNull(GraphQLInt) },
-    },
+    }),
   });
 }
