@@ -5,7 +5,7 @@ import type { GenericOrderBy } from '@lib/schema';
 
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
-import { genModelOrderBy, convertOrderByToSequelizeOrderItem } from '@lib/schema';
+import { genModelOrderBy, convertOrderByToSequelizeOrderItem, cacheGraphQLType } from '@lib/schema';
 
 interface OffsetPaginationArgs {
   offset?: number | null,
@@ -34,11 +34,13 @@ export default function genModelOffsetPagination<M extends SequelizeModel>(model
 }
 
 function makeOffsetConnection<M extends SequelizeModel>(model: Model<M>) {
-  return new GraphQLObjectType({
-    name: model.name + 'OffsetConnection',
-    fields: () => ({
-      nodes: { type: new GraphQLNonNullList(model.type) },
-      count: { type: new GraphQLNonNull(GraphQLInt) },
-    }),
-  });
+  return cacheGraphQLType(
+    new GraphQLObjectType({
+      name: model.name + 'OffsetConnection',
+      fields: () => ({
+        nodes: { type: new GraphQLNonNullList(model.type) },
+        count: { type: new GraphQLNonNull(GraphQLInt) },
+      }),
+    })
+  );
 }
