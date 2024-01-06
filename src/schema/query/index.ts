@@ -16,7 +16,7 @@ export default new GraphQLObjectType({
     ...exposeModel(Book, {
       findById: 'book',
       findByIds: 'booksByIds',
-      list: 'books',
+      pagination: 'books',
     }),
   },
 });
