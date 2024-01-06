@@ -22,7 +22,7 @@ export function genModelFieldsEnum<M extends SequelizeModel>(model: Model<M>) {
   return cacheGraphQLType(
     new GraphQLEnumType({
       name: model.name + 'Fields',
-      values: mapRecord(model.model.getAttributes(), (_, key) => ({ value: key })),
+      values: mapRecord(model.model.getAttributes(), (_, key) => ({ value: key })), // TODO use model definition to remove non-exposed fields
     })
   );
 }
