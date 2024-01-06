@@ -7,6 +7,7 @@ import type { Context } from '@lib/schema';
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
 import { reduceRecord } from '@lib/utils/object';
+import { genModelOffsetPagination } from '@lib/schema';
 
 /**
  * Either the name of the exposed field or false to disable the exposition
@@ -24,10 +25,10 @@ export interface ExposeOpts {
    */
   findByIds: ExposeField;
   /**
-   * Expose a field to get a list of the provided Model.
+   * Expose a field to get a pagination of the provided Model.
    * {@link ExposeField}
    */
-  list: ExposeField;
+  pagination: ExposeField;
 }
 
 export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
@@ -43,7 +44,7 @@ function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
   switch (exposeField) {
     case 'findById': return genFindById(model);
     case 'findByIds': return genFindByIds(model);
-    case 'list': return genList(model);
+    case 'pagination': return genModelOffsetPagination(model);
     default: break;
   }
   throw new Error(`Unsupported expose field: ${exposeField}`);
@@ -71,15 +72,6 @@ function genFindByIds(model: Model<any>): GraphQLFieldConfig<unknown, Context, {
     resolve(source, args, ctx) {
       const { ids } = args;
       return Promise.all(ids.map(id => model.ensureExistence(id, { ctx })));
-    },
-  };
-}
-
-function genList(model: Model<any>): GraphQLFieldConfig<unknown, Context> {
-  return {
-    type: new GraphQLNonNullList(model.type),
-    resolve() {
-      return model.model.findAll();
     },
   };
 }
