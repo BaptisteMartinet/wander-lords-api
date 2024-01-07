@@ -2,7 +2,7 @@ import type { Model as SequelizeModel, OrderItem } from 'sequelize';
 
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 import { Model } from '@lib/definitions';
-import { mapRecord } from '@lib/utils/object';
+import { filterRecord, mapRecord } from '@lib/utils/object';
 import { cacheGraphQLType } from '@lib/schema';
 
 export enum OrderType {
@@ -19,10 +19,11 @@ export const OrderTypeEnum = new GraphQLEnumType({
 });
 
 export function genModelFieldsEnum<M extends SequelizeModel>(model: Model<M>) {
+  const orderableColumns = filterRecord(model.definition.columns, ({ exposed, orderable }) => orderable ?? exposed);
   return cacheGraphQLType(
     new GraphQLEnumType({
       name: model.name + 'Fields',
-      values: mapRecord(model.model.getAttributes(), (_, key) => ({ value: key })), // TODO use model definition to remove non-exposed fields
+      values: mapRecord(orderableColumns, (_, key) => ({ value: key })),
     })
   );
 }
