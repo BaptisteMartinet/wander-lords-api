@@ -28,7 +28,7 @@ export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefi
     paranoid,
   } = definition;
   const attributes = makeModelAttributes(columns);
-  const model = sequelize.define<M>(name, attributes as never, {
+  const model = sequelize.define<M>(name, attributes as never, { // TODO camelize name
     tableName,
     timestamps,
     indexes,
