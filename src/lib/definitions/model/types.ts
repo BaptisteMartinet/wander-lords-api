@@ -26,6 +26,7 @@ export interface FieldDefinition {
   allowNull: boolean,
   exposed: boolean,
   defaultValue?: unknown,
+  orderable?: boolean,
   description?: string,
 }
 
