@@ -23,8 +23,8 @@ export interface FieldType {
 
 export interface FieldDefinition {
   type: FieldType,
-  exposed: boolean,
   allowNull: boolean,
+  exposed: boolean,
   defaultValue?: unknown,
   description?: string,
 }
