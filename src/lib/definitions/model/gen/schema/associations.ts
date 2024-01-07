@@ -3,8 +3,8 @@ import type { Model as SequelizeModel, Association, WhereOptions } from 'sequeli
 import type { GraphQLFieldConfig, GraphQLFieldConfigMap } from 'graphql';
 import type { AssocationSpecs } from '@lib/definitions';
 
-import { GraphQLNonNullList } from '@lib/graphql';
 import { makeRecordFromEntries, mapRecord } from '@lib/utils/object';
+import { genModelOffsetPagination } from '@lib/schema';
 
 function genAssociationWhere(
   args: {
@@ -50,14 +50,13 @@ function genHasOne(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, u
 function genHasMany(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
   const { model: targetModel, description } = associationDef;
-  return {
-    type: new GraphQLNonNullList(targetModel.type),
+  return genModelOffsetPagination(targetModel, {
     description,
-    resolve(source) {
+    where(source) {
       const where = genAssociationWhere({ source, sequelizeAssociation });
-      return targetModel.model.findAll({ where });
+      return where;
     },
-  };
+  });
 }
 
 export function genModelAssociationsFields(associations: Map<string, AssocationSpecs>): GraphQLFieldConfigMap<unknown, unknown> {
