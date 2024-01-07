@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Model as SequelizeModel, WhereOptions, Attributes } from 'sequelize';
-import type { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLNamedOutputType, GraphQLOutputType } from 'graphql';
+import type { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLNamedOutputType } from 'graphql';
 import type { Model } from '@lib/definitions';
 import type { GenericOrderBy } from '@lib/schema';
 
@@ -19,27 +19,27 @@ export type OffsetPaginationGraphQLFieldConfig = GraphQLFieldConfig<unknown, unk
 export interface OffsetPaginationOpts<M extends SequelizeModel> {
   outputType?: GraphQLNamedOutputType,
   args?: GraphQLFieldConfigArgumentMap,
-  where?: (args: any) => WhereOptions<Attributes<M>>,
+  where?: (source: any, args: any, ctx: any) => WhereOptions<Attributes<M>>,
+  description?: string,
 }
 
 export default function genModelOffsetPagination<M extends SequelizeModel>(
   model: Model<M>,
   opts: OffsetPaginationOpts<M> = {}
 ): OffsetPaginationGraphQLFieldConfig {
-  const { outputType, args, where: whereGetter } = opts;
+  const { outputType, args, where: whereGetter, description } = opts;
   const nodeType = outputType ?? model.type;
-  const name = nodeType.name;
   return {
-    type: makeOffsetConnection(name, nodeType),
+    type: makeOffsetConnection(nodeType, { description }),
     args: {
       ...args,
       offset: { type: GraphQLInt },
       limit: { type: GraphQLInt },
       order: { type: new GraphQLNonNullList(genModelOrderBy(model)) },
     },
-    async resolve(_, args) {
+    async resolve(source, args, ctx) {
       const { offset, limit, order, ...customArgs } = args;
-      const where = whereGetter?.(customArgs);
+      const where = whereGetter?.(source, customArgs, ctx);
       const { rows: nodes, count } = await model.model.findAndCountAll({
         offset: offset ?? undefined,
         limit: limit ?? undefined,
@@ -51,10 +51,12 @@ export default function genModelOffsetPagination<M extends SequelizeModel>(
   };
 }
 
-function makeOffsetConnection(name: string, nodeType: GraphQLOutputType) {
+function makeOffsetConnection(nodeType: GraphQLNamedOutputType, opts: { description?: string } = {}) {
+  const { description } = opts;
   return cacheGraphQLType(
     new GraphQLObjectType({
-      name: name + 'OffsetConnection',
+      name: nodeType.name + 'OffsetConnection',
+      description,
       fields: () => ({
         nodes: { type: new GraphQLNonNullList(nodeType) },
         count: { type: new GraphQLNonNull(GraphQLInt) },
