@@ -1,5 +1,5 @@
 import type { Model as SequelizeModel } from 'sequelize';
-import type { GraphQLFieldConfig } from 'graphql';
+import type { GraphQLFieldConfig, GraphQLOutputType } from 'graphql';
 import type { Model } from '@lib/definitions';
 import type { GenericOrderBy } from '@lib/schema';
 
@@ -7,15 +7,22 @@ import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
 import { genModelOrderBy, convertOrderByToSequelizeOrderItem, cacheGraphQLType } from '@lib/schema';
 
-interface OffsetPaginationArgs {
+export interface OffsetPaginationGraphQLArgs {
   offset?: number | null,
   limit?: number | null,
   order?: GenericOrderBy[] | null,
 }
+export type OffsetPaginationGraphQLFieldConfig = GraphQLFieldConfig<unknown, unknown, OffsetPaginationGraphQLArgs>;
 
-export default function genModelOffsetPagination<M extends SequelizeModel>(model: Model<M>): GraphQLFieldConfig<unknown, unknown, OffsetPaginationArgs> {
+export interface OffsetPaginationOpts {
+  outputType?: GraphQLOutputType,
+}
+
+export default function genModelOffsetPagination<M extends SequelizeModel>(model: Model<M>, opts: OffsetPaginationOpts = {}): OffsetPaginationGraphQLFieldConfig {
+  const { outputType } = opts;
+  const nodeType = outputType ?? model.type;
   return {
-    type: makeOffsetConnection(model),
+    type: makeOffsetConnection(model.name, nodeType),
     args: {
       offset: { type: GraphQLInt },
       limit: { type: GraphQLInt },
@@ -33,12 +40,12 @@ export default function genModelOffsetPagination<M extends SequelizeModel>(model
   };
 }
 
-function makeOffsetConnection<M extends SequelizeModel>(model: Model<M>) {
+function makeOffsetConnection(name: string, nodeType: GraphQLOutputType) {
   return cacheGraphQLType(
     new GraphQLObjectType({
-      name: model.name + 'OffsetConnection',
+      name: name + 'OffsetConnection',
       fields: () => ({
-        nodes: { type: new GraphQLNonNullList(model.type) },
+        nodes: { type: new GraphQLNonNullList(nodeType) },
         count: { type: new GraphQLNonNull(GraphQLInt) },
       }),
     })
