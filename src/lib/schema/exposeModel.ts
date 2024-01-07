@@ -42,15 +42,15 @@ export default function exposeModel(model: Model<any>, opts: ExposeOpts) {
 
 function genExposition(model: Model<any>, exposeField: keyof ExposeOpts) {
   switch (exposeField) {
-    case 'findById': return genFindById(model);
-    case 'findByIds': return genFindByIds(model);
+    case 'findById': return genModelFindById(model);
+    case 'findByIds': return genModelFindByIds(model);
     case 'pagination': return genModelOffsetPagination(model);
     default: break;
   }
   throw new Error(`Unsupported expose field: ${exposeField}`);
 }
 
-function genFindById(model: Model<any>): GraphQLFieldConfig<unknown, Context, { id: Identifier }> {
+function genModelFindById(model: Model<any>): GraphQLFieldConfig<unknown, Context, { id: Identifier }> {
   return {
     type: new GraphQLNonNull(model.type),
     args: {
@@ -63,7 +63,7 @@ function genFindById(model: Model<any>): GraphQLFieldConfig<unknown, Context, { 
   };
 }
 
-function genFindByIds(model: Model<any>): GraphQLFieldConfig<unknown, Context, { ids: Array<Identifier> }> {
+function genModelFindByIds(model: Model<any>): GraphQLFieldConfig<unknown, Context, { ids: Array<Identifier> }> {
   return {
     type: new GraphQLNonNull(new GraphQLNonNullList(model.type)),
     args: {
