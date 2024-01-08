@@ -25,6 +25,7 @@ export interface FieldDefinition {
   allowNull: boolean,
   exposed: boolean,
   defaultValue?: unknown,
+  autoIncrement?: boolean,
   orderable?: boolean,
   description?: string,
 }
