@@ -16,30 +16,30 @@ import { getEnumEntries } from '@lib/utils/enum';
 /**
  * To be used with a `UUIDV1` or `UUIDV4` default value.
  */
-export const ID: FieldType = {
+export const ID = {
   gqlType: GraphQLID,
   sequelizeType: DataTypes.UUID,
-} as const;
+} as const satisfies FieldType;
 
-export const INTEGER: FieldType = {
+export const INTEGER = {
   gqlType: GraphQLInt,
   sequelizeType: DataTypes.INTEGER,
-} as const;
+} as const satisfies FieldType;
 
-export const FLOAT: FieldType = {
+export const FLOAT = {
   gqlType: GraphQLFloat,
   sequelizeType: DataTypes.FLOAT,
-} as const;
+} as const satisfies FieldType;
 
-export const STRING: FieldType = {
+export const STRING = {
   gqlType: GraphQLString,
   sequelizeType: DataTypes.STRING,
-} as const;
+} as const satisfies FieldType;
 
-export const BOOLEAN: FieldType = {
+export const BOOLEAN = {
   gqlType: GraphQLBoolean,
   sequelizeType: DataTypes.BOOLEAN,
-} as const;
+} as const satisfies FieldType;
 
 /**
  * Takes an enum and build its FieldType
