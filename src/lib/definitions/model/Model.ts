@@ -4,6 +4,7 @@ import type { ModelDefinition, AssociationDefinition, AssocationSpecs } from './
 
 import { GraphQLObjectType } from 'graphql';
 import { unthunk } from '@lib/utils/thunk.js';
+import { DefaultIDFieldDefinition } from './constants.js';
 import { genDatabaseModel, genModelGraphQLType } from './gen';
 
 export default class Model<M extends SequelizeModel> {
@@ -23,6 +24,10 @@ export default class Model<M extends SequelizeModel> {
 
   get name() {
     return this.definition.name;
+  }
+
+  get idType() {
+    return this.definition.id?.type.gqlType ?? DefaultIDFieldDefinition.type.gqlType;
   }
 
   private genAssociation(associationName: string, associationDef: AssociationDefinition) {

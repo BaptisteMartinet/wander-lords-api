@@ -4,7 +4,7 @@ import type { Identifier } from 'sequelize';
 import type { Model } from '@lib/definitions';
 import type { Context } from '@lib/schema';
 
-import { GraphQLInt, GraphQLNonNull } from 'graphql';
+import { GraphQLNonNull } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
 import { reduceRecord } from '@lib/utils/object';
 import { genModelOffsetPagination } from '@lib/schema';
@@ -54,7 +54,7 @@ function genModelFindById(model: Model<any>): GraphQLFieldConfig<unknown, Contex
   return {
     type: new GraphQLNonNull(model.type),
     args: {
-      id: { type: new GraphQLNonNull(GraphQLInt) },
+      id: { type: new GraphQLNonNull(model.idType) },
     },
     resolve(source, args, ctx) {
       const { id } = args;
@@ -67,7 +67,7 @@ function genModelFindByIds(model: Model<any>): GraphQLFieldConfig<unknown, Conte
   return {
     type: new GraphQLNonNull(new GraphQLNonNullList(model.type)),
     args: {
-      ids: { type: new GraphQLNonNull(new GraphQLNonNullList(GraphQLInt)) },
+      ids: { type: new GraphQLNonNull(new GraphQLNonNullList(model.idType)) },
     },
     resolve(source, args, ctx) {
       const { ids } = args;

@@ -1,9 +1,8 @@
 import type { Model as SequelizeModel, ModelAttributes, ModelAttributeColumnOptions } from 'sequelize';
 import type { ModelDefinition, FieldDefinition, IDFieldDefinition } from '@lib/definitions';
 
-import { DataTypes } from 'sequelize';
 import { mapRecord } from '@lib/utils/object';
-import { ID } from '@lib/definitions';
+import { DefaultIDFieldDefinition } from '@lib/definitions';
 
 export function makeModelAttributes(fields: Record<string, FieldDefinition>): ModelAttributes {
   const attributes = mapRecord(fields, (field) => {
@@ -19,7 +18,7 @@ export function makeModelAttributes(fields: Record<string, FieldDefinition>): Mo
 }
 
 export function makeModelIdAttribute(idFieldDefinition?: IDFieldDefinition): ModelAttributeColumnOptions<never> {
-  const fieldDef = idFieldDefinition !== undefined ? idFieldDefinition : { type: ID, defaultValue: DataTypes.UUIDV4 };
+  const fieldDef = idFieldDefinition !== undefined ? idFieldDefinition : DefaultIDFieldDefinition;
   const { type: { sequelizeType }, defaultValue, autoIncrement } = fieldDef;
   return { primaryKey: true, allowNull: false, type: sequelizeType, defaultValue, autoIncrement };
 }
