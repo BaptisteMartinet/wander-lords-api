@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLInputObjectType, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLID, GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { Book } from '@definitions/models';
 
 export default new GraphQLObjectType({
@@ -11,7 +11,7 @@ export default new GraphQLObjectType({
           type: new GraphQLNonNull(new GraphQLInputObjectType({
             name: 'CreateBookInput',
             fields: {
-              authorId: { type: new GraphQLNonNull(GraphQLInt) },
+              authorId: { type: new GraphQLNonNull(GraphQLID) },
               title: { type: new GraphQLNonNull(GraphQLString) },
             },
           })),
@@ -26,7 +26,7 @@ export default new GraphQLObjectType({
     update: {
       type: new GraphQLNonNull(Book.type),
       args: {
-        id: { type: new GraphQLNonNull(GraphQLInt) },
+        id: { type: new GraphQLNonNull(GraphQLID) },
         patch: {
           type: new GraphQLNonNull(new GraphQLInputObjectType({
             name: 'UpdateBookInput',
@@ -46,7 +46,7 @@ export default new GraphQLObjectType({
     delete: {
       type: new GraphQLNonNull(GraphQLBoolean),
       args: {
-        id: { type: new GraphQLNonNull(GraphQLInt) },
+        id: { type: new GraphQLNonNull(GraphQLID) },
       },
       async resolve(_, args) {
         const { id } = args;
