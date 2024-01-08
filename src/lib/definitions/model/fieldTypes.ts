@@ -15,7 +15,7 @@ import { getEnumEntries } from '@lib/utils/enum';
 
 export const ID: FieldType = {
   gqlType: GraphQLID,
-  sequelizeType: DataTypes.UUIDV4,
+  sequelizeType: DataTypes.UUID,
 } as const;
 
 export const INTEGER: FieldType = {

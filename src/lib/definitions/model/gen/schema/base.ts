@@ -1,12 +1,13 @@
 import type { Model as SequelizeModel } from 'sequelize';
 import type { GraphQLFieldConfigMap } from 'graphql';
 import type { Model } from '@lib/definitions';
-import type { FieldDefinition } from '@lib/definitions';
+import type { ModelDefinition, FieldDefinition } from '@lib/definitions';
 
-import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
+import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphlQLDate } from '@lib/graphql';
 import { mapRecord, filterRecord } from '@lib/utils/object';
 import { unthunk } from '@lib/utils/thunk';
+import { ID } from '@lib/definitions';
 import { genModelAssociationsFields } from './associations';
 
 export function genModelColumnsFields(columns: Record<string, FieldDefinition>): GraphQLFieldConfigMap<unknown, unknown> {
@@ -27,15 +28,11 @@ export function genModelColumnsFields(columns: Record<string, FieldDefinition>):
   });
 }
 
-export function genModelBaseFields(
-  args: {
-    timestamps: boolean,
-    paranoid?: boolean,
-  },
-): GraphQLFieldConfigMap<unknown, unknown> {
-  const { timestamps, paranoid } = args;
+export function genModelBaseFields(definition: Pick<ModelDefinition<never>, 'id' | 'timestamps' | 'paranoid'>): GraphQLFieldConfigMap<unknown, unknown> {
+  const { id: idFieldDefinition, timestamps, paranoid } = definition;
+  const idFieldType = idFieldDefinition?.type.gqlType ?? ID.gqlType;
   return {
-    id: { type: new GraphQLNonNull(GraphQLInt) },
+    id: { type: new GraphQLNonNull(idFieldType) },
     ...(timestamps ? {
       createdAt: { type: new GraphQLNonNull(GraphlQLDate) },
       updatedAt: { type: new GraphQLNonNull(GraphlQLDate) },

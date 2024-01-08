@@ -30,6 +30,8 @@ export interface FieldDefinition {
   description?: string,
 }
 
+export type IDFieldDefinition = Pick<FieldDefinition, 'type' | 'autoIncrement' | 'defaultValue'>;
+
 export type AssociationType = 'belongsTo' | 'hasOne' | 'hasMany';
 
 export interface AssociationDefinition {
@@ -49,6 +51,7 @@ export type AssocationSpecs = {
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
   name: string,
+  id?: IDFieldDefinition,
   columns: Record<string, FieldDefinition>,
   timestamps: boolean,
   sequelize: Sequelize,
