@@ -17,10 +17,9 @@ export function makeModelAttributes(fields: Record<string, FieldDefinition>): Mo
   return attributes;
 }
 
-export function makeModelIdAttribute(idFieldDefinition?: IDFieldDefinition): ModelAttributeColumnOptions<never> {
-  const fieldDef = idFieldDefinition !== undefined ? idFieldDefinition : DefaultIDFieldDefinition;
-  const { type: { sequelizeType }, defaultValue, autoIncrement } = fieldDef;
-  return { primaryKey: true, allowNull: false, type: sequelizeType, defaultValue, autoIncrement };
+export function makeModelIdAttribute(idFieldDefinition: IDFieldDefinition = DefaultIDFieldDefinition): ModelAttributeColumnOptions<never> {
+  const { type: { sequelizeType: type }, defaultValue, autoIncrement } = idFieldDefinition;
+  return { primaryKey: true, allowNull: false, type, defaultValue, autoIncrement };
 }
 
 export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefinition<M>) {
