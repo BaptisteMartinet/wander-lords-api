@@ -4,6 +4,7 @@ import type { FieldType } from './types';
 import {
   GraphQLID,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLString,
   GraphQLBoolean,
   GraphQLEnumType,
@@ -20,6 +21,11 @@ export const ID: FieldType = {
 export const INTEGER: FieldType = {
   gqlType: GraphQLInt,
   sequelizeType: DataTypes.INTEGER,
+} as const;
+
+export const FLOAT: FieldType = {
+  gqlType: GraphQLFloat,
+  sequelizeType: DataTypes.FLOAT,
 } as const;
 
 export const STRING: FieldType = {
