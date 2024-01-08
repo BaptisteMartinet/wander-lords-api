@@ -2,6 +2,7 @@ import type { EnumType } from '@lib/utils/enum';
 import type { FieldType } from './types';
 
 import {
+  GraphQLID,
   GraphQLInt,
   GraphQLString,
   GraphQLBoolean,
@@ -10,6 +11,11 @@ import {
 import { DataTypes } from 'sequelize';
 import { mapRecord } from '@lib/utils/object';
 import { getEnumEntries } from '@lib/utils/enum';
+
+export const ID: FieldType = {
+  gqlType: GraphQLID,
+  sequelizeType: DataTypes.UUIDV4,
+} as const;
 
 export const INTEGER: FieldType = {
   gqlType: GraphQLInt,
