@@ -24,8 +24,6 @@ export interface FieldDefinition {
   type: FieldType,
   allowNull: boolean,
   exposed: boolean,
-  primaryKey?: boolean,
-  autoIncrement?: boolean,
   defaultValue?: unknown,
   orderable?: boolean,
   description?: string,

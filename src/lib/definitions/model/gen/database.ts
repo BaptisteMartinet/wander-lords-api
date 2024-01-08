@@ -5,12 +5,10 @@ import { mapRecord } from '@lib/utils/object';
 
 export function makeModelAttributes(fields: Record<string, FieldDefinition>) {
   const attributes = mapRecord(fields, (field) => {
-    const { type, allowNull, primaryKey, autoIncrement, defaultValue } = field;
+    const { type, allowNull, defaultValue } = field;
     return {
       type: type.sequelizeType,
       allowNull,
-      primaryKey,
-      autoIncrement,
       defaultValue,
     };
   })
