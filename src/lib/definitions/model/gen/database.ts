@@ -2,6 +2,7 @@ import type { Model as SequelizeModel, ModelAttributes, ModelAttributeColumnOpti
 import type { ModelDefinition, FieldDefinition, IDFieldDefinition } from '@lib/definitions';
 
 import { mapRecord } from '@lib/utils/object';
+import { camelize } from '@lib/utils/string';
 import { DefaultIDFieldDefinition } from '@lib/definitions';
 
 export function makeModelAttributes(fields: Record<string, FieldDefinition>): ModelAttributes {
@@ -37,7 +38,7 @@ export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefi
     id: makeModelIdAttribute(idFieldDefinition),
     ...makeModelAttributes(columns),
   };
-  const model = sequelize.define<M>(name, attributes as never, { // TODO camelize name
+  const model = sequelize.define<M>(camelize(name), attributes as never, {
     tableName,
     timestamps,
     indexes,
