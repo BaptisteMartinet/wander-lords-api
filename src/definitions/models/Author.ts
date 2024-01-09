@@ -22,7 +22,6 @@ const Author: Model<AuthorModel> = new Model({
     books: {
       model: Book,
       type: 'hasMany',
-      foreignKey: 'authorId',
       exposed: true,
       description: 'A test desc',
     },
