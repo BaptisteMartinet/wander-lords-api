@@ -23,7 +23,17 @@ export function genModelFieldsEnum<M extends SequelizeModel>(model: Model<M>) {
   return cacheGraphQLType(
     new GraphQLEnumType({
       name: model.name + 'Fields',
-      values: mapRecord(orderableColumns, (_, key) => ({ value: key })),
+      values: {
+        id: { value: 'id' },
+        ...mapRecord(orderableColumns, (_, key) => ({ value: key })),
+        ...(model.definition.timestamps ? {
+          createdAt: { value: 'createdAt' },
+          updatedAt: { value: 'updatedAt' },
+        } : null),
+        ...(model.definition.paranoid === true ? {
+          deletedAt: { value: 'deletedAt' },
+        } : null),
+      },
     })
   );
 }
