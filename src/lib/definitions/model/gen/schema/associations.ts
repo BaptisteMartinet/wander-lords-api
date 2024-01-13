@@ -14,10 +14,15 @@ function genAssociationWhere(
   }
 ): WhereOptions {
   const { parent, sequelizeAssociation } = args;
-  const { foreignKey, source, target, associationType } = sequelizeAssociation;
-  if (['HasMany', 'HasOne'].includes(associationType))
-    return { [foreignKey]: parent.dataValues[source.primaryKeyAttribute] };
-  return { [target.primaryKeyAttribute]: parent.dataValues[foreignKey] };
+  const { associationType, foreignKey, source, target } = sequelizeAssociation;
+  switch (associationType) {
+    case 'HasMany':
+    case 'HasOne':
+      return { [foreignKey]: parent.dataValues[source.primaryKeyAttribute] };
+    case 'BelongsTo':
+      return { [target.primaryKeyAttribute]: parent.dataValues[foreignKey] };
+    default: throw new Error(`Unsupported association type: ${associationType}`);
+  }
 }
 
 function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, Context> {
