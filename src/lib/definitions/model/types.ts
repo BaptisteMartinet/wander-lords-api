@@ -39,7 +39,6 @@ export interface AssociationDefinition {
   type: AssociationType,
   exposed: boolean,
   foreignKey?: string,
-  sourceKey?: string,
   deleteCascade?: boolean,
   description?: string,
 }

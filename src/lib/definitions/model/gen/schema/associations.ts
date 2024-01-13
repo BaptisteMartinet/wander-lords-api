@@ -2,64 +2,66 @@
 import type { Model as SequelizeModel, Association, WhereOptions } from 'sequelize';
 import type { GraphQLFieldConfig, GraphQLFieldConfigMap } from 'graphql';
 import type { AssocationSpecs } from '@lib/definitions';
+import type { Context } from '@lib/schema';
 
 import { makeRecordFromEntries, mapRecord } from '@lib/utils/object';
 import { genModelOffsetPagination } from '@lib/schema';
 
 function genAssociationWhere(
   args: {
-    source: SequelizeModel,
+    parent: SequelizeModel,
     sequelizeAssociation: Association,
   }
 ): WhereOptions {
-  const { source, sequelizeAssociation } = args;
-  const { foreignKey, isMultiAssociation } = sequelizeAssociation;
-  // TODO The Association type does not include targetKey/sourceKey
-  const sourceKey: string = (sequelizeAssociation as any).targetKey ?? (sequelizeAssociation as any).sourceKey;
-  if (isMultiAssociation)
-    return { [foreignKey]: source.dataValues[sourceKey] };
-  return { [sourceKey]: source.dataValues[foreignKey] };
+  const { parent, sequelizeAssociation } = args;
+  const { foreignKey, source, target, associationType } = sequelizeAssociation;
+  if (['HasMany', 'HasOne'].includes(associationType))
+    return { [foreignKey]: parent.dataValues[source.primaryKeyAttribute] };
+  return { [target.primaryKeyAttribute]: parent.dataValues[foreignKey] };
 }
 
-function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
+function genBelongsTo(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, Context> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
   const { model: targetModel, description } = associationDef;
   return {
     type: targetModel.type,
     description,
-    resolve(source) {
-      const where = genAssociationWhere({ source, sequelizeAssociation });
-      return targetModel.model.findOne({ where });
+    resolve(source, args, ctx) {
+      const { foreignKey } = sequelizeAssociation;
+      const pk = source[foreignKey];
+      if (pk === null || pk === undefined)
+        return null;
+      return targetModel.findByPkAllAttrs(pk, { ctx });
     },
   };
 }
 
-function genHasOne(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
+function genHasOne(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, Context> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
   const { model: targetModel, description } = associationDef;
   return {
     type: targetModel.type,
     description,
-    resolve(source) {
-      const where = genAssociationWhere({ source, sequelizeAssociation });
+    resolve(parent) {
+      const where = genAssociationWhere({ parent, sequelizeAssociation });
       return targetModel.model.findOne({ where });
     }
   };
 }
 
-function genHasMany(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, unknown> {
+function genHasMany(associationSpecs: AssocationSpecs): GraphQLFieldConfig<any, Context> {
   const { sequelizeAssociation, associationDef } = associationSpecs;
   const { model: targetModel, description } = associationDef;
   return genModelOffsetPagination(targetModel, {
     description,
-    where(source) {
-      const where = genAssociationWhere({ source, sequelizeAssociation });
+    where(parent) {
+      const where = genAssociationWhere({ parent, sequelizeAssociation });
       return where;
     },
   });
 }
 
-export function genModelAssociationsFields(associations: Map<string, AssocationSpecs>): GraphQLFieldConfigMap<unknown, unknown> {
+export function genModelAssociationsFields(associations: Map<string, AssocationSpecs>): GraphQLFieldConfigMap<unknown, Context> {
   if (associations.size <= 0)
     return {};
   const exposedAssociations = Array.from(associations).filter(([, { associationDef }]) => associationDef.exposed);

@@ -31,12 +31,12 @@ export default class Model<M extends SequelizeModel> {
   }
 
   private genAssociation(associationName: string, associationDef: AssociationDefinition) {
-    const { model: targetModel, type, foreignKey, sourceKey, deleteCascade } = associationDef;
+    const { model: targetModel, type, foreignKey, deleteCascade } = associationDef;
     const onDelete = (deleteCascade === true ? 'CASCADE' : 'SET NULL');
     switch (type) {
-      case 'belongsTo': return this._model.belongsTo(targetModel.model, { as: associationName, foreignKey, targetKey: sourceKey, onDelete });
-      case 'hasOne': return this._model.hasOne(targetModel.model, { as: associationName, foreignKey, sourceKey, onDelete });
-      case 'hasMany': return this._model.hasMany(targetModel.model, { as: associationName, foreignKey, sourceKey, onDelete });
+      case 'belongsTo': return this._model.belongsTo(targetModel.model, { as: associationName, foreignKey, onDelete });
+      case 'hasOne': return this._model.hasOne(targetModel.model, { as: associationName, foreignKey, onDelete });
+      case 'hasMany': return this._model.hasMany(targetModel.model, { as: associationName, foreignKey, onDelete });
       default: throw new Error(`Invalid association type: ${type}`);
     }
   }
