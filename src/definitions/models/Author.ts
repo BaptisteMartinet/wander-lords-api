@@ -3,7 +3,7 @@ import type { InferModel } from '@lib/sequelize';
 
 import { Model, STRING } from '@lib/definitions';
 import sequelize from '@core/sequelize.js';
-import { Book } from '@definitions/models';
+import { Book, Profile } from '@definitions/models';
 import { RoleEnum, Role } from '@definitions/enums';
 
 export interface AuthorModel extends InferModel<AuthorModel> {
@@ -24,6 +24,12 @@ const Author: Model<AuthorModel> = new Model({
       type: 'hasMany',
       exposed: true,
       description: 'A test desc',
+    },
+    profile: {
+      model: Profile,
+      type: 'hasOne',
+      foreignKey: 'authorId',
+      exposed: true,
     },
   }),
   timestamps: true,
