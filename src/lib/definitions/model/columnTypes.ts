@@ -42,7 +42,7 @@ export const BOOLEAN = {
 } as const satisfies ColumnType;
 
 /**
- * Takes an enum and build its FieldType
+ * Takes an enum and build its ColumnType
  *
  * @example
  *
