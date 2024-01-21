@@ -1,5 +1,5 @@
 export { default as exposeModel } from './exposeModel';
-export { default as scopedMutation } from './scopedMutation';
+export { default as scopedField } from './scopedField';
 export { default as genModelOffsetPagination } from './genModelOffsetPagination';
 export {
   default as genModelOrderBy,
