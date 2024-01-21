@@ -65,7 +65,7 @@ export const BOOLEAN = {
  * });
  * ```
  */
-export function makeEnum(
+export function ENUM(
   args: {
     name: string,
     values: EnumType,
