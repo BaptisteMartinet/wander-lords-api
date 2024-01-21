@@ -1,11 +1,11 @@
 import type { Model as SequelizeModel, ModelAttributes, ModelAttributeColumnOptions } from 'sequelize';
-import type { ModelDefinition, FieldDefinition, IDFieldDefinition } from '@lib/definitions';
+import type { ModelDefinition, ColumnDefinition, IDColumnDefinition } from '@lib/definitions';
 
 import { mapRecord } from '@lib/utils/object';
 import { camelize } from '@lib/utils/string';
 import { DefaultIDFieldDefinition } from '@lib/definitions';
 
-export function makeModelAttributes(fields: Record<string, FieldDefinition>): ModelAttributes {
+export function makeModelAttributes(fields: Record<string, ColumnDefinition>): ModelAttributes {
   const attributes = mapRecord(fields, (field) => {
     const { type, allowNull, defaultValue, autoIncrement } = field;
     return {
@@ -18,7 +18,7 @@ export function makeModelAttributes(fields: Record<string, FieldDefinition>): Mo
   return attributes;
 }
 
-export function makeModelIdAttribute(idFieldDefinition: IDFieldDefinition = DefaultIDFieldDefinition): ModelAttributeColumnOptions<never> {
+export function makeModelIdAttribute(idFieldDefinition: IDColumnDefinition = DefaultIDFieldDefinition): ModelAttributeColumnOptions<never> {
   const { type: { sequelizeType: type }, defaultValue, autoIncrement } = idFieldDefinition;
   return { primaryKey: true, allowNull: false, type, defaultValue, autoIncrement };
 }

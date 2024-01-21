@@ -1,5 +1,5 @@
 import type { EnumType } from '@lib/utils/enum';
-import type { FieldType } from './types';
+import type { ColumnType } from './types';
 
 import {
   GraphQLID,
@@ -19,27 +19,27 @@ import { getEnumEntries } from '@lib/utils/enum';
 export const ID = {
   gqlType: GraphQLID,
   sequelizeType: DataTypes.UUID,
-} as const satisfies FieldType;
+} as const satisfies ColumnType;
 
 export const INTEGER = {
   gqlType: GraphQLInt,
   sequelizeType: DataTypes.INTEGER,
-} as const satisfies FieldType;
+} as const satisfies ColumnType;
 
 export const FLOAT = {
   gqlType: GraphQLFloat,
   sequelizeType: DataTypes.FLOAT,
-} as const satisfies FieldType;
+} as const satisfies ColumnType;
 
 export const STRING = {
   gqlType: GraphQLString,
   sequelizeType: DataTypes.STRING,
-} as const satisfies FieldType;
+} as const satisfies ColumnType;
 
 export const BOOLEAN = {
   gqlType: GraphQLBoolean,
   sequelizeType: DataTypes.BOOLEAN,
-} as const satisfies FieldType;
+} as const satisfies ColumnType;
 
 /**
  * Takes an enum and build its FieldType
@@ -71,7 +71,7 @@ export function makeEnum(
     values: EnumType,
     description?: string,
   },
-): FieldType {
+): ColumnType {
   const { name, values, description } = args;
   const entries = getEnumEntries(values);
   const gqlType = new GraphQLEnumType({

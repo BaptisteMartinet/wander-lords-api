@@ -1,7 +1,7 @@
 import type { Model as SequelizeModel } from 'sequelize';
 import type { GraphQLFieldConfigMap } from 'graphql';
 import type { Model } from '@lib/definitions';
-import type { ModelDefinition, FieldDefinition } from '@lib/definitions';
+import type { ModelDefinition, ColumnDefinition } from '@lib/definitions';
 
 import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphlQLDate } from '@lib/graphql';
@@ -10,7 +10,7 @@ import { unthunk } from '@lib/utils/thunk';
 import { DefaultIDFieldDefinition } from '@lib/definitions';
 import { genModelAssociationsFields } from './associations';
 
-export function genModelColumnsFields(columns: Record<string, FieldDefinition>): GraphQLFieldConfigMap<unknown, unknown> {
+export function genModelColumnsFields(columns: Record<string, ColumnDefinition>): GraphQLFieldConfigMap<unknown, unknown> {
   const exposedColumns = filterRecord(columns, column => column.exposed) as NonNullable<typeof columns>;
   return mapRecord(exposedColumns, field => {
     const {

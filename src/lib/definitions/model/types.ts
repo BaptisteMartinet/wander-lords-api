@@ -15,13 +15,13 @@ import type {
 } from 'graphql';
 import type Model from './Model';
 
-export interface FieldType {
+export interface ColumnType {
   gqlType: GraphQLScalarType | GraphQLEnumType, // TODO infer typing?
   sequelizeType: DataType,
 }
 
-export interface FieldDefinition {
-  type: FieldType,
+export interface ColumnDefinition {
+  type: ColumnType,
   allowNull: boolean,
   exposed: boolean,
   defaultValue?: unknown,
@@ -30,7 +30,7 @@ export interface FieldDefinition {
   description?: string,
 }
 
-export type IDFieldDefinition = Pick<FieldDefinition, 'type' | 'autoIncrement' | 'defaultValue'>;
+export type IDColumnDefinition = Pick<ColumnDefinition, 'type' | 'autoIncrement' | 'defaultValue'>;
 
 export type AssociationType = 'belongsTo' | 'hasOne' | 'hasMany';
 
@@ -50,8 +50,8 @@ export type AssocationSpecs = {
 
 export interface ModelDefinition<ModelType extends SequelizeModel> {
   name: string,
-  id?: IDFieldDefinition,
-  columns: Record<string, FieldDefinition>,
+  id?: IDColumnDefinition,
+  columns: Record<string, ColumnDefinition>,
   timestamps: boolean,
   sequelize: Sequelize,
   associations?: () => Record<string, AssociationDefinition>,
