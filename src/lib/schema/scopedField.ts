@@ -5,6 +5,10 @@ import { GraphQLNonNull } from 'graphql';
 export default function scopedField(type: GraphQLObjectType): GraphQLFieldConfig<unknown, unknown> {
   return {
     type: new GraphQLNonNull(type),
-    resolve() { return {}; },
+    resolve(source) {
+      if (source === undefined)
+        return {};
+      return source;
+    },
   };
 }
