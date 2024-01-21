@@ -1,5 +1,5 @@
 import { GraphQLObjectType } from 'graphql';
-import { scopedMutation } from '@lib/schema';
+import { scopedField } from '@lib/schema';
 import AuthorMutation from './Author.mutation';
 import BookMutation from './Book.mutation';
 import ProfileMutation from './Profile.mutation';
@@ -7,8 +7,8 @@ import ProfileMutation from './Profile.mutation';
 export default new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    author: scopedMutation(AuthorMutation),
-    book: scopedMutation(BookMutation),
-    profile: scopedMutation(ProfileMutation),
+    author: scopedField(AuthorMutation),
+    book: scopedField(BookMutation),
+    profile: scopedField(ProfileMutation),
   },
 });
