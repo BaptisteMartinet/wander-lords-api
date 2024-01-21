@@ -39,7 +39,7 @@ export function genDatabaseModel<M extends SequelizeModel>(definition: ModelDefi
     ...makeModelAttributes(columns),
   };
   const model = sequelize.define<M>(camelize(name), attributes as never, {
-    tableName,
+    tableName: tableName ?? name,
     timestamps,
     indexes,
     paranoid,
