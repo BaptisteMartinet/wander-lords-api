@@ -51,7 +51,7 @@ export const BOOLEAN = {
  *  Manager = 'Manager',
  *  Admin = 'Admin',
  * }
- * const RoleEnum = makeEnum({
+ * const RoleEnum = ENUM({
  *  name: 'Role',
  *  values: Role,
  * });
