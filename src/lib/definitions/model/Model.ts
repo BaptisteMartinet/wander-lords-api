@@ -27,7 +27,7 @@ export default class Model<M extends SequelizeModel> {
   }
 
   get idType() {
-    return this.definition.id?.type.gqlType ?? DefaultIDFieldDefinition.type.gqlType;
+    return this.definition.id?.type ?? DefaultIDFieldDefinition.type;
   }
 
   private genAssociation(associationName: string, associationDef: AssociationDefinition) {

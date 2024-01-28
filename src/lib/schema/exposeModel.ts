@@ -54,7 +54,7 @@ function genModelFindById(model: Model<any>): GraphQLFieldConfig<unknown, Contex
   return {
     type: new GraphQLNonNull(model.type),
     args: {
-      id: { type: new GraphQLNonNull(model.idType) },
+      id: { type: new GraphQLNonNull(model.idType.gqlType) },
     },
     resolve(source, args, ctx) {
       const { id } = args;
@@ -67,7 +67,7 @@ function genModelFindByIds(model: Model<any>): GraphQLFieldConfig<unknown, Conte
   return {
     type: new GraphQLNonNull(new GraphQLNonNullList(model.type)),
     args: {
-      ids: { type: new GraphQLNonNull(new GraphQLNonNullList(model.idType)) },
+      ids: { type: new GraphQLNonNull(new GraphQLNonNullList(model.idType.gqlType)) },
     },
     resolve(source, args, ctx) {
       const { ids } = args;
