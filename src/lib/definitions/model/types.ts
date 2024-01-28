@@ -12,12 +12,14 @@ import type {
   GraphQLFieldConfig,
   GraphQLEnumType,
   GraphQLScalarType,
+  GraphQLInputObjectType,
 } from 'graphql';
 import type Model from './Model';
 
 export interface ColumnType {
   gqlType: GraphQLScalarType | GraphQLEnumType, // TODO infer typing?
   sequelizeType: DataType,
+  filterGqlType: GraphQLInputObjectType,
 }
 
 export interface ColumnDefinition {
@@ -27,6 +29,7 @@ export interface ColumnDefinition {
   defaultValue?: unknown,
   autoIncrement?: boolean,
   orderable?: boolean,
+  filterable?: boolean,
   description?: string,
 }
 

@@ -12,6 +12,14 @@ import {
 import { DataTypes } from 'sequelize';
 import { mapRecord } from '@lib/utils/object';
 import { getEnumEntries } from '@lib/utils/enum';
+import {
+  IDFilter,
+  IntFilter,
+  FloatFilter,
+  StringFilter,
+  BooleanFilter,
+  makeFiltersType,
+} from './columnTypesFilters';
 
 /**
  * To be used with a `UUIDV1` or `UUIDV4` default value.
@@ -19,26 +27,31 @@ import { getEnumEntries } from '@lib/utils/enum';
 export const ID = {
   gqlType: GraphQLID,
   sequelizeType: DataTypes.UUID,
+  filterGqlType: IDFilter,
 } as const satisfies ColumnType;
 
 export const INTEGER = {
   gqlType: GraphQLInt,
   sequelizeType: DataTypes.INTEGER,
+  filterGqlType: IntFilter,
 } as const satisfies ColumnType;
 
 export const FLOAT = {
   gqlType: GraphQLFloat,
   sequelizeType: DataTypes.FLOAT,
+  filterGqlType: FloatFilter,
 } as const satisfies ColumnType;
 
 export const STRING = {
   gqlType: GraphQLString,
   sequelizeType: DataTypes.STRING,
+  filterGqlType: StringFilter,
 } as const satisfies ColumnType;
 
 export const BOOLEAN = {
   gqlType: GraphQLBoolean,
   sequelizeType: DataTypes.BOOLEAN,
+  filterGqlType: BooleanFilter,
 } as const satisfies ColumnType;
 
 /**
@@ -84,5 +97,6 @@ export function ENUM(
   return {
     gqlType,
     sequelizeType,
+    filterGqlType: makeFiltersType(gqlType),
   };
 }

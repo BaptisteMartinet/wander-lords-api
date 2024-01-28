@@ -4,14 +4,22 @@ import type { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLNamedOut
 import type { Model } from '@lib/definitions';
 import type { GenericOrderBy } from '@lib/schema';
 
+import { Op } from 'sequelize';
 import { GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphQLNonNullList } from '@lib/graphql';
-import { genModelOrderBy, convertOrderByToSequelizeOrderItem, cacheGraphQLType } from '@lib/schema';
+import { resolveFilters } from '@lib/definitions/model/columnTypesFilters';
+import {
+  genModelOrderBy,
+  convertOrderByToSequelizeOrderItem,
+  genModelFilters,
+  cacheGraphQLType,
+} from '@lib/schema';
 
 export interface OffsetPaginationGraphQLArgs {
   offset?: number | null,
   limit?: number | null,
   order?: GenericOrderBy[] | null,
+  filters?: Record<string, any>,
   [key: string]: unknown, // Custom args
 }
 export type OffsetPaginationGraphQLFieldConfig = GraphQLFieldConfig<unknown, unknown, OffsetPaginationGraphQLArgs>;
@@ -36,15 +44,23 @@ export default function genModelOffsetPagination<M extends SequelizeModel>(
       offset: { type: GraphQLInt },
       limit: { type: GraphQLInt },
       order: { type: new GraphQLNonNullList(genModelOrderBy(model)) },
+      filters: { type: genModelFilters(model) },
     },
     async resolve(source, args, ctx) {
-      const { offset, limit, order, ...customArgs } = args;
-      const where = whereGetter?.(source, customArgs, ctx);
+      const { offset, limit, order, filters, ...customArgs } = args;
+
+      const whereConditions: Array<WhereOptions> = [];
+      if (whereGetter)
+        whereConditions.push(whereGetter(source, customArgs, ctx));
+      if (filters)
+        whereConditions.push(resolveFilters(filters));
+      const where = { [Op.and]: whereConditions };
+
       const { rows: nodes, count } = await model.model.findAndCountAll({
         offset: offset ?? undefined,
         limit: limit ?? undefined,
         order: order?.map(convertOrderByToSequelizeOrderItem),
-        where: where,
+        where,
       });
       return { nodes, count };
     },
