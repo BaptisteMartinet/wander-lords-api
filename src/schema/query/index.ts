@@ -1,6 +1,5 @@
 import { GraphQLObjectType } from 'graphql';
-import { GraphQLNonNullList } from '@lib/graphql';
-import { exposeModel } from '@lib/schema';
+import { GraphQLNonNullList, exposeModel } from '@sequelize-graphql/core';
 import { Author, Book } from '@definitions/models';
 
 export default new GraphQLObjectType({

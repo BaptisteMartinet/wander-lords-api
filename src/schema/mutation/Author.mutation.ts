@@ -1,4 +1,4 @@
-import type { Context } from '@lib/schema';
+import type { Context } from '@sequelize-graphql/core';
 
 import { GraphQLBoolean, GraphQLID, GraphQLInputObjectType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { Author } from '@definitions/models';

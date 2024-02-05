@@ -1,12 +1,12 @@
 import type { CreationOptional } from 'sequelize';
-import type { InferModel } from '@lib/sequelize';
+import type { InferSequelizeModel } from '@sequelize-graphql/core';
 
-import { Model, STRING } from '@lib/definitions';
+import { Model, STRING } from '@sequelize-graphql/core';
 import sequelize from '@core/sequelize.js';
 import { Book, Profile } from '@definitions/models';
 import { RoleEnum, Role } from '@definitions/enums';
 
-export interface AuthorModel extends InferModel<AuthorModel> {
+export interface AuthorModel extends InferSequelizeModel<AuthorModel> {
   id: CreationOptional<number>;
   name: string;
   role: Role,

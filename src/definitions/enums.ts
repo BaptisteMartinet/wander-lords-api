@@ -1,4 +1,4 @@
-import { ENUM } from '@lib/definitions';
+import { ENUM } from '@sequelize-graphql/core';
 
 export enum Role {
   Manager = 'Manager',

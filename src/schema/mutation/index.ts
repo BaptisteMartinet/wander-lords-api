@@ -1,5 +1,5 @@
 import { GraphQLObjectType } from 'graphql';
-import { scopedField } from '@lib/schema';
+import { scopedField } from '@sequelize-graphql/core';
 import AuthorMutation from './Author.mutation';
 import BookMutation from './Book.mutation';
 import ProfileMutation from './Profile.mutation';

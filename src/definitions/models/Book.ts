@@ -1,11 +1,11 @@
 import type { CreationOptional, ForeignKey } from 'sequelize';
-import type { InferModel } from '@lib/sequelize';
+import type { InferSequelizeModel } from '@sequelize-graphql/core';
 
-import { Model, STRING, ID } from '@lib/definitions';
+import { Model, STRING, ID } from '@sequelize-graphql/core';
 import sequelize from '@core/sequelize.js';
 import { Author } from '@definitions/models';
 
-export interface BookModel extends InferModel<BookModel> {
+export interface BookModel extends InferSequelizeModel<BookModel> {
   id: CreationOptional<number>;
   authorId: ForeignKey<number>;
   title: string;
